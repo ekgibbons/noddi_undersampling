@@ -1,0 +1,4 @@
+# common python stuff to ignore
+*.pyc
+*#
+*~
