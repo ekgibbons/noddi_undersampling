@@ -2,13 +2,6 @@ import glob
 import ntpath
 import json
 
-import numpy as np
-from matplotlib import pyplot as plt
-
-import nibabel as nib
-
-from utils import display
-
 def pnumber(filename):
 
     print(ntpath.basename(filename))
@@ -47,29 +40,3 @@ json_filename = "noddi_metadata.json"
 
 with open(json_filename,"w") as json_filename:
     json.dump(patients,json_filename,sort_keys=True,indent=4)
-
-# print(len(filenames_full))
-
-# for filename in filenames_full:
-#     pnumber(filename)
-
-
-# print(len(filenames_noddi))
-
-# for filename in filenames_noddi:
-#     pnumber(filename)
-
-
-    
-# file_1 = filenames[0]
-
-# pnumber(file_1)
-
-# img = nib.load(file_1)
-
-# img_np = img.get_data()
-# print(img_np.shape)
-
-# plt.figure()
-# display.Render(img_np[:,:,:,0])
-# plt.show()
