@@ -10,14 +10,18 @@ from utils import mkdir
 with open("noddi_metadata.json") as metadata:
     patient_database = json.load(metadata)
 
-subsampling = [0, 1, 2, 3, 5, 6, 8, 10, 11, 12, 13, 21, 31, 32,
-               40, 41, 45, 47, 49, 52, 55, 57, 60, 65, 66, 70,
-               81, 82, 86, 94, 95, 99, 100, 104, 110, 123, 164,
-               167, 168, 174, 193, 197, 205]
+subsampling = [0, 1, 2, 3, 5, 6, 8, 10, 11, 12, 13, 15, 18, 21, 27, 31, 32,
+               40, 41, 45, 47, 49, 52, 55, 57, 60, 63, 65, 66, 70,
+               81, 82, 86, 94, 95, 99, 100, 102, 104, 107, 110, 113, 115, 118,
+               123, 130, 135, 140, 145, 150, 155, 160, 164,
+               167, 168, 174, 180, 184, 187, 190, 193, 197,
+               200, 205]
 
 num_cases = len(patient_database)
 print("We have %i cases" % len(patient_database))
+print("We have %i directions" % len(subsampling))
 
+print("\n")
 ii = 0 
 for patient_number in patient_database.keys():
     print("Currently reading: %s" % patient_number)
@@ -47,8 +51,9 @@ for patient_number in patient_database.keys():
     if (ii > 32):
         break
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_43_directions.h5","w")
-hf.create_dataset("x_43_directions",data=x)
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions.h5" %
+               len(subsampling),"w")
+hf.create_dataset("x_%i_directions" % len(subsampling), data=x)
 hf.close
 
 hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi.h5","w")
