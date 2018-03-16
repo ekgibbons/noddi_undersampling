@@ -9,14 +9,16 @@ from keras.layers import Lambda
 from keras.layers import BatchNormalization as BN
 from keras import backend as K
 
-def unet3d_model(input_size):
+def unet2d_model(input_size):
 
     # input size is a tuple of the size of the image
     # assuming channel last
     # input_size = (dim1, dim2, dim3, ch)
     # unet begins
 
-    nfeatures = [16,32,64,128,256,512]
+    # nfeatures = [16,32,64,128,256,512]
+    features = np.arange(0,6)
+    nfeatures = [input_size[2]*(2**feature_size) for feature_size in features]
     depth = len(nfeatures)
 
     conv_ptr = []
@@ -27,13 +29,11 @@ def unet3d_model(input_size):
     # step down convolutional layers
     pool = inputs
     for depth_cnt in range(depth):
-
-
-        conv = layers.Conv3D(nfeatures[depth_cnt], (3,3,3), 
+        conv = layers.Conv2D(nfeatures[depth_cnt], (3,3), 
                              padding='same', 
                              activation='relu',
                              kernel_initializer='he_normal')(pool)
-        conv = layers.Conv3D(nfeatures[depth_cnt], (3,3,3), 
+        conv = layers.Conv2D(nfeatures[depth_cnt], (3,3), 
                              padding='same', 
                              activation='relu',
                              kernel_initializer='he_normal')(conv)
@@ -44,7 +44,7 @@ def unet3d_model(input_size):
         conv_ptr.append(conv)
 
         if depth_cnt < depth-1:
-            pool = layers.MaxPooling3D(pool_size=(2,2,2))(conv)
+            pool = layers.MaxPooling2D(pool_size=(2,2))(conv)
     
     # step up convolutional layers
     for depth_cnt in range(depth-2,-1,-1):
@@ -52,17 +52,17 @@ def unet3d_model(input_size):
         deconv_shape = conv_ptr[depth_cnt].shape.as_list()
         deconv_shape[0] = None
       
-        up = layers.concatenate([layers.Conv3DTranspose(nfeatures[depth_cnt],(3,3,3),
+        up = layers.concatenate([layers.Conv2DTranspose(nfeatures[depth_cnt],(3,3),
                                                         padding='same',
-                                                        strides=(2,2,2))(conv),
+                                                        strides=(2,2))(conv),
                                  conv_ptr[depth_cnt]], 
-                                axis=4)
+                                axis=3)
 
-        conv = layers.Conv3D(nfeatures[depth_cnt], (3,3,3), 
+        conv = layers.Conv2D(nfeatures[depth_cnt], (3,3), 
                              padding='same', 
                              activation='relu',
                              kernel_initializer='he_normal')(up)
-        conv = layers.Conv3D(nfeatures[depth_cnt], (3,3,3), 
+        conv = layers.Conv2D(nfeatures[depth_cnt], (3,3), 
                              padding='same', 
                              activation='relu',
                              kernel_initializer='he_normal')(conv)
@@ -75,14 +75,14 @@ def unet3d_model(input_size):
     # conv_shape = conv.shape.as_list()
 
     # step down and combine features
-    depth_total = int(np.log2(input_size[2]))
-    for depth_cnt in range(depth_total):
-        conv = layers.Conv3D(1, (3,3,3),
-                             padding='same',
-                             activation='relu',
-                             kernel_initializer='he_normal')(conv)
+    # depth_total = int(np.log2(input_size[2]))
+    # for depth_cnt in range(depth_total):
+    #     conv = layers.Conv3D(1, (3,3,3),
+    #                          padding='same',
+    #                          activation='relu',
+    #                          kernel_initializer='he_normal')(conv)
 
-        conv = layers.MaxPooling3D(pool_size=(1,1,2))(conv)
+    #     conv = layers.MaxPooling3D(pool_size=(1,1,2))(conv)
         
     # conv = layers.Conv3D(1, (3,3,1),
     #                      padding='same',
@@ -91,9 +91,9 @@ def unet3d_model(input_size):
 
 
     # print(conv)
-    recon = layers.Conv3D(1, (1,1,1),
-                         padding='same',
-                         activation='sigmoid')(conv)
+    recon = layers.Conv2D(1, (1,1),
+                          padding='same',
+                          activation='sigmoid')(conv)
 
     model = models.Model(inputs=[inputs], outputs=[recon])
     keras.utils.plot_model(model, to_file='unet3d.png',show_shapes=True)
@@ -102,9 +102,9 @@ def unet3d_model(input_size):
 
 
 def main():
-    input_size = (128, 128, 64, 1)
+    input_size = (128, 128, 64)
 
-    model = unet3d_model(input_size)
+    model = unet2d_model(input_size)
 
 
 
