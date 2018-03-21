@@ -25,15 +25,18 @@ print("We have %i directions" % len(subsampling))
 
 print("\n")
 ii = 0 
-for patient_number in patient_database.keys():
+for patient_number in sorted(patient_database.keys()):
+    if (ii <= 32):
+        continue
+    
     print("Currently reading: %s" % patient_number)
     
     noddi_data = noddistudy.NoddiData(patient_number)
 
-    data_full = noddi_data.get_full()[:,:,2:(-1-3),:]
-    data_odi = noddi_data.get_odi()[:,:,2:(-1-3)]
-    data_fiso = noddi_data.get_fiso()[:,:,2:(-1-3)]
-    data_ficvf = noddi_data.get_ficvf()[:,:,2:(-1-3)]
+    data_full = noddi_data.get_full()
+    data_odi = noddi_data.get_odi()
+    data_fiso = noddi_data.get_fiso()
+    data_ficvf = noddi_data.get_ficvf()
 
     data_subsampled = data_full[:,:,:,subsampling]
 
@@ -60,23 +63,21 @@ for patient_number in patient_database.keys():
 
     ii += 1
 
-    if (ii > 32):
-        break
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions.h5" %
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_test.h5" %
                len(subsampling),"w")
 hf.create_dataset("x_%i_directions" % len(subsampling), data=x)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_test.h5","w")
 hf.create_dataset("y_odi",data=y_odi)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_test.h5","w")
 hf.create_dataset("y_fiso",data=y_fiso)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_test.h5","w")
 hf.create_dataset("y_ficvf",data=y_ficvf)
 hf.close
 

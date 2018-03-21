@@ -1,209 +1,244 @@
 {
     "N011118A": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118A_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118A_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N011118A_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118A_hydi_odi.nii"
     },
     "N011118B": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118B_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118B_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N011118B_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118B_hydi_odi.nii"
     },
     "N011118C": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118C_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118C_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N011118C_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011118C_hydi_odi.nii"
     },
     "N011618": {
+        "data_type": "test",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011618_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011618_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N011618_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N011618_hydi_odi.nii"
     },
     "N012518A": {
+        "data_type": "test",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N012518A_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N012518A_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N012518A_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N012518A_hydi_odi.nii"
     },
     "N012518B": {
+        "data_type": "test",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N012518B_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N012518B_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N012518B_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N012518B_hydi_odi.nii"
     },
     "N030515": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N030515_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N030515_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N030515_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N030515_hydi_odi.nii"
     },
     "N080515": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N080515_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N080515_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N080515_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N080515_hydi_odi.nii"
     },
     "N081215": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N081215_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N081215_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N081215_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N081215_hydi_odi.nii"
     },
     "N082115": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N082115_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N082115_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N082115_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N082115_hydi_odi.nii"
     },
     "N090415": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N090415_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N090415_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N090415_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N090415_hydi_odi.nii"
     },
     "N100215": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N100215_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N100215_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N100215_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N100215_hydi_odi.nii"
     },
     "N122217": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N122217_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N122217_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/N122217_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/N122217_hydi_odi.nii"
     },
     "P020916": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P020916_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P020916_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P020916_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P020916_hydi_odi.nii"
     },
     "P021617": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P021617_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P021617_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P021617_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P021617_hydi_odi.nii"
     },
     "P030315": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P030315_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P030315_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P030315_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P030315_hydi_odi.nii"
     },
     "P032315": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P032315_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P032315_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P032315_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P032315_hydi_odi.nii"
     },
     "P033015": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P033015_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P033015_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P033015_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P033015_hydi_odi.nii"
     },
     "P051815": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P051815_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P051815_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P051815_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P051815_hydi_odi.nii"
     },
     "P061815": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P061815_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P061815_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P061815_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P061815_hydi_odi.nii"
     },
     "P071916": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P071916_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P071916_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P071916_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P071916_hydi_odi.nii"
     },
     "P072216": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P072216_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P072216_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P072216_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P072216_hydi_odi.nii"
     },
     "P080715": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P080715_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P080715_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P080715_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P080715_hydi_odi.nii"
     },
     "P081215": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P081215_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P081215_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P081215_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P081215_hydi_odi.nii"
     },
     "P082216": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P082216_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P082216_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P082216_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P082216_hydi_odi.nii"
     },
     "P082616": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P082616_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P082616_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P082616_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P082616_hydi_odi.nii"
     },
     "P090616": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090616_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090616_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P090616_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090616_hydi_odi.nii"
     },
     "P090816": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090816_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090816_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P090816_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090816_hydi_odi.nii"
     },
     "P090915": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090915_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090915_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P090915_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P090915_hydi_odi.nii"
     },
     "P100716": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P100716_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P100716_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P100716_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P100716_hydi_odi.nii"
     },
     "P110316": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P110316_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P110316_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P110316_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P110316_hydi_odi.nii"
     },
     "P110415": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P110415_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P110415_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P110415_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P110415_hydi_odi.nii"
     },
     "P112415": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P112415_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P112415_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P112415_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P112415_hydi_odi.nii"
     },
     "P121216": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P121216_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P121216_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P121216_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",
         "odi": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P121216_hydi_odi.nii"
     },
     "P122016": {
+        "data_type": "train",
         "ficvf": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P122016_hydi_ficvf.nii",
         "fiso": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/Models/NODDIMaps/P122016_hydi_fiso.nii",
         "full": "/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/Stroke_DSI_Processing/Data/DeEddyed_volumes/P122016_DWIBETDenoisedDebiasedDeringedDeEddy.nii.gz",

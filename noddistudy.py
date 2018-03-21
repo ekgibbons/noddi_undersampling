@@ -41,7 +41,20 @@ class NoddiData(object):
             sys.exit(0)
 
         self.patient_info = self.patient_database[patient_number]
-                
+
+    def get_type(self):
+        """
+        Returns the type of data (training versus testing)
+    
+        Returns
+        -------
+        data_type:  str
+            The type of data ("train" or "test")
+        """
+
+        return self.patient_info["data_type"]
+        
+        
     def get_full(self,return_nifti=False):
         """
         Returns the full (all directions) image pixel values

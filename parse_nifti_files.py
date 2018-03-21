@@ -13,7 +13,12 @@ filenames_full = glob.glob("%s/*.nii.gz" % path_full)
 filenames_noddi = glob.glob("%s/*.nii" % path_noddi)
 
 patients = {}
+
+num_patients = len(filenames_full)
+
+ii = 0
 for filename in filenames_full:
+    
     filename_base = ntpath.basename(filename)
     if filename_base[7] is not "_":
         patient_number = filename_base[:8]
@@ -33,6 +38,13 @@ for filename in filenames_full:
         continue
 
     patients[patient_number] = patient_dict
+
+    if (num_patients - 4) > ii:
+        patient_dict["data_type"] = "train"
+    else:
+        patient_dict["data_type"] = "test"
+    
+    ii += 1
 
 print(len(patients))
 

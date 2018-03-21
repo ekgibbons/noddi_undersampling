@@ -1,22 +1,26 @@
 from __future__ import print_function, division
 
+from matplotlib import pyplot as plt
 import numpy as np
+
+import tensorflow as tf
 
 from keras import models
 from keras import layers
+from keras import losses
 import keras.utils
+from keras.applications import densenet
 from keras.layers import Lambda
 from keras.layers import BatchNormalization as BN
+
 from keras import backend as K
+
+import noddistudy
+from utils import display
+
 
 def unet2d_model(input_size):
 
-    # input size is a tuple of the size of the image
-    # assuming channel last
-    # input_size = (dim1, dim2, dim3, ch)
-    # unet begins
-
-    # nfeatures = [16,32,64,128,256,512]
     features = np.arange(0,6)
     nfeatures = [input_size[2]*(2**feature_size) for feature_size in features]
     depth = len(nfeatures)
@@ -70,28 +74,7 @@ def unet2d_model(input_size):
         conv = BN(axis=1, momentum=0.95, epsilon=0.001)(conv)
         conv = layers.Dropout(rate=0.20)(conv)
 
-    # combine features
-    # conv = layers.Conv3D(1, (1,1,1), padding='same', activation='relu')(conv)
-    # conv_shape = conv.shape.as_list()
-
-    # step down and combine features
-    # depth_total = int(np.log2(input_size[2]))
-    # for depth_cnt in range(depth_total):
-    #     conv = layers.Conv3D(1, (3,3,3),
-    #                          padding='same',
-    #                          activation='relu',
-    #                          kernel_initializer='he_normal')(conv)
-
-    #     conv = layers.MaxPooling3D(pool_size=(1,1,2))(conv)
-        
-    # conv = layers.Conv3D(1, (3,3,1),
-    #                      padding='same',
-    #                      activation='relu',
-    #                      kernel_initializer='he_normal')(conv)
-
-
-    # print(conv)
-    recon = layers.Conv2D(1, (1,1),
+    recon = layers.Conv2D(3, (1,1),
                           padding='same',
                           activation='sigmoid')(conv)
 
@@ -100,13 +83,22 @@ def unet2d_model(input_size):
     
     return model
 
+    
 
 def main():
     input_size = (128, 128, 64)
 
+
     model = unet2d_model(input_size)
+    
+    model.summary()
+    
+
 
 
 
 if __name__ == "__main__":
     main()
+
+
+
