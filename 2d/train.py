@@ -1,3 +1,6 @@
+import os
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
+
 import numpy as np
 from matplotlib import pyplot as plt
 
@@ -40,10 +43,10 @@ model.compile(optimizer=Adam(lr=1e-3, beta_1=0.99, beta_2=0.995,
                              epsilon=1e-08, decay=0.85),
               loss="mean_absolute_error")
 
-x_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/x_64_directions.h5"
-y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi.h5"
-y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso.h5"
-y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf.h5"
+x_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/x_64_directions_train.h5"
+y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_train.h5"
+y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_train.h5"
+y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_train.h5"
 
 print("Loading data...")
 x = readhd5.ReadHDF5(x_path,"x_64_directions")
@@ -60,6 +63,9 @@ y /= np.amax(y)
 
 x = x.transpose(3,0,1,2)
 y = y.transpose(3,0,1,2)
+
+print(x.shape)
+print(y.shape)
 
 x_train = x[(x.shape[0]*4)//5:,:,:,:]
 y_train = y[(y.shape[0]*4)//5:,:,:,:]

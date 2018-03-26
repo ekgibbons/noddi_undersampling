@@ -9,6 +9,7 @@ import tensorflow as tf
 
 from utils import readhd5
 
+import dense2d
 import models2d
 import noddistudy
 
@@ -19,7 +20,7 @@ subsampling = [0, 1, 2, 3, 5, 6, 8, 10, 11, 12, 13, 15, 18, 21, 27, 31,
                168, 174, 180, 184, 187, 190, 193, 197, 200, 205]
 
 image_size = (128,128,64)
-model = models2d.unet2d_model(image_size)
+model = dense2d.dense_net(image_size)
 model.compile(optimizer=Adam(lr=1e-3, beta_1=0.99, beta_2=0.995,
                              epsilon=1e-08, decay=0.7),
               loss="mean_absolute_error",
@@ -45,7 +46,7 @@ print(x.shape)
 
 print("Predicting...")
 start = time.time()
-recon = model.predict(x, batch_size=32)
+recon = model.predict(x, batch_size=1)
 print("Predictions completed...took: %f" % (time.time() - start))
 
 slice_use = 25
@@ -65,6 +66,6 @@ montage_combine = np.concatenate((montage_top,
                                  axis=0)
 
 plt.figure()
-plt.imshow(montage_combine)
+plt.imshow(montage_combine,vmax=1)
 plt.show()
 

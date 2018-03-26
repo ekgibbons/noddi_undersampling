@@ -129,7 +129,7 @@ def dense_net(input_shape=None):
         else:
             x = transition_block_end(x, 0.5, name=("pool%i" % (ii+2)))
             
-    x = Activation("linear", name="linear")(x)
+    x = Activation("relu", name="relu")(x)
     
     model = Model(inputs=[img_input], outputs=[x])
 

@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 
 import numpy as np
@@ -28,7 +29,8 @@ class NoddiData(object):
         """
 
         if metadata_name is None:
-            metadata_name = "noddi_metadata.json"
+            dir_name = os.path.dirname(__file__)
+            metadata_name = "%s/noddi_metadata.json" % (dir_name)
 
         with open(metadata_name) as metadata:
             self.patient_database = json.load(metadata)
@@ -37,9 +39,8 @@ class NoddiData(object):
             print("Choose patient from the following list:\n")
             for patient_number_list in self.patient_database.keys():
                 print("\t%s" % patient_number_list)
-
-            sys.exit(0)
-
+            sys.exit()
+                
         self.patient_info = self.patient_database[patient_number]
 
     def get_type(self):
