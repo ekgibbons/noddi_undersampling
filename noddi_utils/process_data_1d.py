@@ -12,19 +12,13 @@ sys.path.append("/home/mirl/egibbons/noddi")
 from utils import display
 from utils import mkdir
 
-
-
 from noddi_utils import noddistudy
+from noddi_utils import subsampling
 
 with open("../noddi_utils/noddi_metadata.json") as metadata:
     patient_database = json.load(metadata)
 
-subsampling = [0, 1, 2, 3, 5, 6, 8, 10, 11, 12, 13, 15, 18, 21, 27, 31, 32,
-               40, 41, 45, 47, 49, 52, 55, 57, 60, 63, 65, 66, 70,
-               81, 82, 86, 94, 95, 99, 100, 102, 104, 107, 110, 113, 115, 118,
-               123, 130, 135, 140, 145, 150, 155, 160, 164,
-               167, 168, 174, 180, 184, 187, 190, 193, 197,
-               200, 205]
+subsampling = subsampling.gensamples(64)
 
 num_cases = len(patient_database)
 print("We have %i cases" % len(patient_database))
@@ -95,18 +89,13 @@ for patient_number in sorted(patient_database.keys()):
 max_values = np.amax(x,axis=0)
 x /= max_values
 
+y_odi /= np.amax(y_odi)
+y_fiso /= np.amax(y_fiso)
+y_ficvf /= np.amax(y_ficvf)
+
 hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_1d.h5","w")
 hf.create_dataset("max_values", data=max_values)
 hf.close
-
-
-# hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/mean_values_1d.h5","w")
-# hf.create_dataset("mean_values", data=mean_values)
-# hf.close
-
-# hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/std_values_1d.h5","w")
-# hf.create_dataset("std_values", data=std_values)
-# hf.close
 
 hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_train_1d.h5" %
                len(subsampling),"w")

@@ -1,4 +1,5 @@
 import os
+import time 
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 import numpy as np
@@ -8,7 +9,7 @@ import tensorflow as tf
 from keras.optimizers import Adam
 from keras.utils.training_utils import multi_gpu_model
 from keras import backend as K
-from keras.callbacks import TensorBoard, ModelCheckpoint
+from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau
 
 from utils import readhd5
 from utils import display
@@ -16,67 +17,39 @@ from utils import display
 import models2d
 import dense2d
 
-# need to use this when I require batches from an already memory-loaded X, y
-def batch_generator(X, y, batch_size):
-    batch_i = 0
-    while 1:
-        if (batch_i+1)*batch_size >= len(X):
-            yield X[batch_i*batch_size:], y[batch_i*batch_size:]
-            batch_i = 0
-        else:
-            yield (X[batch_i*batch_size:(batch_i+1)*batch_size],
-                   y[batch_i*batch_size:(batch_i+1)*batch_size])
-            batch_i += 1
-
 n_gpu = 1
 n_epochs = 200
-batch_size = 10
+batch_size = 20
+learning_rate = 1e-3
 
 image_size = (128,128,64)
 
-# with tf.device("/cpu:0"):
 model = dense2d.dense_net(image_size)
     
-# model = multi_gpu_model(model, gpus=n_gpu)
-    
-model.compile(optimizer=Adam(lr=1e-3, beta_1=0.99, beta_2=0.995,
-                             epsilon=1e-08, decay=0.85),
+optimizer = Adam(lr=learning_rate)
+model.compile(optimizer=optimizer,
               loss="mean_absolute_error")
 
-x_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/x_64_directions_train.h5"
-y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_train.h5"
-y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_train.h5"
-y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_train.h5"
+x_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/x_64_directions_2d.h5"
+y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_2d.h5"
+y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_2d.h5"
+y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_2d.h5"
 
 print("Loading data...")
-x = readhd5.ReadHDF5(x_path,"x_64_directions")
+
+start = time.time()
 y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
 y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
 y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
-print("Data is loaded...")
 
 y = np.concatenate((y_odi, y_fiso, y_ficvf),
-                   axis=2)
+                   axis=3)
 
-x /= np.amax(x)
-y /= np.amax(y)
+x = readhd5.ReadHDF5(x_path,"x_64_directions")
 
-x = x.transpose(3,0,1,2)
-y = y.transpose(3,0,1,2)
-
-print(x.shape)
-print(y.shape)
-
-x_train = x[(x.shape[0]*4)//5:,:,:,:]
-y_train = y[(y.shape[0]*4)//5:,:,:,:]
-
-x_test = x[:(x.shape[0]*4)//5,:,:,:]
-y_test = y[:(y.shape[0]*4)//5,:,:,:]
+print("Data is loaded...took: %f seconds" % (time.time() - start))
 
 batch_size_multi_gpu = n_gpu*batch_size
-train_steps = x_train.shape[0]//batch_size_multi_gpu
-validation_steps = x_test.shape[0]//batch_size_multi_gpu
-
 
 tensorboard = TensorBoard(log_dir='./logs',
                           histogram_freq=1,
@@ -88,26 +61,21 @@ tensorboard = TensorBoard(log_dir='./logs',
                           embeddings_layer_names=None,
                           embeddings_metadata=None)
 
-checkpointer = ModelCheckpoint(filepath="/v/raid1b/egibbons/models/noddi-64.h5",
+checkpointer = ModelCheckpoint(filepath="/v/raid1b/egibbons/models/noddi-64_2d.h5",
                                verbose=1,
                                save_best_only=True,
-                               save_weights_only=True)
+                               save_weights_only=True,
+                               period=1)
 
-model.fit_generator(
-    batch_generator(x_train, y_train,
-                    batch_size_multi_gpu),
-    steps_per_epoch=train_steps,
-    epochs=n_epochs,
-    verbose=1,
-    validation_data=(x_test, y_test),
-    validation_steps=validation_steps,
-    callbacks=[checkpointer]
-    )
+reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.1,
+                              patience=5, min_lr=1e-7) 
 
-x_test = x[0,:,:,:]
-y_test = y[0,:,:,:]
-
-recon = model.predict(x_test, batch_size=1)
-
-print(recon.shape)
-
+model.fit(x=x,
+          y=y,
+          batch_size=batch_size_multi_gpu,
+          epochs=n_epochs,
+          verbose=1,
+          callbacks=[checkpointer, reduce_lr],
+          validation_split=0.2,
+          shuffle=True,
+          )

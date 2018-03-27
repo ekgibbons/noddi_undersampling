@@ -108,9 +108,9 @@ slice_use = 25
 #                                  prediction[:,:,slice_use,2]),
 #                                 axis=1)
 
-montage_top = prediction[:,:,slice_use,0]
-montage_bottom = data_odi[:,:,slice_use]
 
+montage_top = data_odi[:,:,slice_use]
+montage_bottom = prediction[:,:,slice_use,0]
 
 
 montage_combine = np.concatenate((montage_top,

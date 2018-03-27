@@ -1,5 +1,6 @@
 from keras.models import Sequential
 from keras.layers.core import Dense, Dropout
+from keras.utils import plot_model
 
 def fc_1d(input_shape):
     model = Sequential()
@@ -13,16 +14,6 @@ def fc_1d(input_shape):
     model.add(Dense(512,activation="relu"))
     model.add(Dropout(0.1))
 
-    
-    # model.add(Dense(512,activation="relu"))
-    # model.add(Dropout(0.2))
-        
-    # model.add(Dense(1024,activation="relu"))
-    # model.add(Dropout(0.2))
-        
-    # model.add(Dense(512,activation="relu"))
-    # model.add(Dropout(0.2))
-
     model.add(Dense(3,activation="relu"))
     
     return model
@@ -33,6 +24,10 @@ def main():
     model = fc_1d(input_shape)
 
     model.summary()
+
+    plot_model(model,
+               to_file="1dnet_im.png",
+               show_shapes=True)
     
 
 if __name__ == "__main__":

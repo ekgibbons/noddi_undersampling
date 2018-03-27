@@ -17,14 +17,9 @@ sys.path.append("/home/mirl/egibbons/noddi")
 
 import model1d
 from noddi_utils import noddistudy
+from noddi_utils import subsampling
 
-
-
-subsampling = [0, 1, 2, 3, 5, 6, 8, 10, 11, 12, 13, 15, 18, 21, 27, 31,
-               32, 40, 41, 45, 47, 49, 52, 55, 57, 60, 63, 65, 66, 70,
-               81, 82, 86, 94, 95, 99, 100, 102, 104, 107, 110, 113, 115,
-               118, 123, 130, 135, 140, 145, 150, 155, 160, 164, 167,
-               168, 174, 180, 184, 187, 190, 193, 197, 200, 205]
+subsampling = gensamples.subsampling(64)
 
 image_size = (len(subsampling),)
 
@@ -59,7 +54,6 @@ display.Render(data_subsampled[:,:,25,:])
 
 dim0, dim1, n_slices, n_channels = data_subsampled.shape
 
-
 print("Predicting...")
 start = time.time()
 
@@ -86,7 +80,8 @@ for ll in range(running_sum):
     ii = int(location[ll,0])
     jj = int(location[ll,1])
     kk = int(location[ll,2])
-    prediction[ii,jj,kk,:] = recon[ll,0]
+    prediction[ii,jj,kk,:] = recon[ll,:]
+
 
 print("Predictions completed...took: %f" % (time.time() - start))
 

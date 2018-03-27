@@ -12,10 +12,8 @@ import keras.utils
 from keras.applications import densenet
 from keras.layers import Lambda
 from keras.layers import BatchNormalization as BN
-
 from keras import backend as K
 
-import noddistudy
 from utils import display
 
 
@@ -76,7 +74,7 @@ def unet2d_model(input_size):
 
     recon = layers.Conv2D(3, (1,1),
                           padding='same',
-                          activation='sigmoid')(conv)
+                          activation='relu')(conv)
 
     model = models.Model(inputs=[inputs], outputs=[recon])
     keras.utils.plot_model(model, to_file='unet3d.png',show_shapes=True)

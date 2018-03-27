@@ -122,9 +122,10 @@ def dense_net(input_shape=None):
                            name="conv1/bn")(x)
     x = Activation("relu", name="conv1/relu")(x)
 
-    for ii in range(8):
+    depth = 2
+    for ii in range(2):
         x = dense_block(x, blocks[0], name=("conv%i"  % (ii+2)))
-        if ii+1 < 8:
+        if ii+1 < depth:
             x = transition_block(x, 0.5, name=("pool%i" % (ii+2)))
         else:
             x = transition_block_end(x, 0.5, name=("pool%i" % (ii+2)))
@@ -144,7 +145,7 @@ def main():
     model.summary()
     
     plot_model(model,
-               to_file="dense_im.png",
+               to_file="1dnet_im.png",
                show_shapes=True)
 
 

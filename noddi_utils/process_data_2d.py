@@ -75,48 +75,58 @@ for patient_number in sorted(patient_database.keys()):
             data_ficvf_temp = data_ficvf_temp[::-1,:,:]
             data_subsampled_temp = data_subsampled_temp[::-1,:,:,:]
 
-
-    data_subsampled /= np.amax(data_subsampled)
-    data_odi /= np.amax(data_odi)
-    data_fiso /= np.amax(data_fiso)
-    data_ficvf /= np.amax(data_ficvf)
     
     if ii == 0:
-        x = data_subsampled.transpose(0,1,3,2)
-        y_odi = data_odi[:,:,:,None].transpose(0,1,3,2)
-        y_fiso = data_fiso[:,:,:,None].transpose(0,1,3,2)
-        y_ficvf = data_ficvf[:,:,:,None].transpose(0,1,3,2)
+        x = data_subsampled.transpose(2,0,1,3)
+        y_odi = data_odi[:,:,:,None].transpose(2,0,1,3)
+        y_fiso = data_fiso[:,:,:,None].transpose(2,0,1,3)
+        y_ficvf = data_ficvf[:,:,:,None].transpose(2,0,1,3)
         
     else:
         x = np.concatenate((x,
-                            data_subsampled.transpose(0,1,3,2)),
-                           axis=3)
+                            data_subsampled.transpose(2,0,1,3)),
+                           axis=0)
         y_odi = np.concatenate((y_odi,
-                                data_odi[:,:,:,None].transpose(0,1,3,2)),
-                               axis=3)
+                                data_odi[:,:,:,None].transpose(2,0,1,3)),
+                               axis=0)
         y_fiso = np.concatenate((y_fiso,
-                                 data_fiso[:,:,:,None].transpose(0,1,3,2)),
-                                axis=3)
+                                 data_fiso[:,:,:,None].transpose(2,0,1,3)),
+                                axis=0)
         y_ficvf = np.concatenate((y_ficvf,
-                                  data_ficvf[:,:,:,None].transpose(0,1,3,2)),
-                                 axis=3)
+                                  data_ficvf[:,:,:,None].transpose(2,0,1,3)),
+                                 axis=0)
 
     ii += 1
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_train.h5" %
+print("The final data shape is: (%i, %i, %i, %i)" % x.shape)
+n_samples, dim0, dim1, n_channels = x.shape
+
+x_reshape = x.reshape(-1,n_channels)
+maxs = np.amax(x_reshape, axis=0)[None, None, None, :]
+x /= maxs
+
+plt.figure()
+display.Render(x[25,:,:,:])
+
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_2d.h5","w")
+hf.create_dataset("max_values", data=maxs)
+hf.close
+    
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_2d.h5" %
                len(subsampling),"w")
 hf.create_dataset("x_%i_directions" % len(subsampling), data=x)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_train.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_2d.h5","w")
 hf.create_dataset("y_odi",data=y_odi)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_train.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_2d.h5","w")
 hf.create_dataset("y_fiso",data=y_fiso)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_train.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_2d.h5","w")
 hf.create_dataset("y_ficvf",data=y_ficvf)
 hf.close
 
+plt.show()
