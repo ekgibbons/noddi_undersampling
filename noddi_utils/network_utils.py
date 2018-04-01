@@ -1,17 +1,28 @@
 from __future__ import print_function, division
 
-from matplotlib import pyplot as plt
-import numpy as np
+import math
+import sys
 
-import tensorflow as tf
-
+from keras import backend as K
 from keras import models
 from keras.applications import vgg16
 
-from keras import backend as K
+from matplotlib import pyplot as plt
+import numpy as np
+import tensorflow as tf
 
-import noddistudy
+sys.path.append("/home/mirl/egibbons/noddi")
+
+from noddi_utils import noddistudy
 from utils import display
+
+def step_decay(epoch):
+   initial_lrate = 1e-3
+   drop = 0.5
+   epochs_drop = 10.0
+   lrate = initial_lrate * math.pow(drop,  
+           math.floor((1+epoch)/epochs_drop))
+   return lrate
 
 def perceptual_loss(y_true, y_predict):
 
@@ -27,7 +38,7 @@ def perceptual_loss(y_true, y_predict):
     loss_model.trainable = False
 
     loss = 0
-    for ii in range(3):
+    for ii in range(2):
         y_true_slice = tf.expand_dims(y_true[:,:,:,ii],-1)
         y_true_rgb = tf.image.grayscale_to_rgb(y_true_slice,
                                                name=None)

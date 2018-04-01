@@ -1,8 +1,12 @@
 import glob
+import sys
+
 from matplotlib import pyplot as plt
 import numpy as np
 
-import noddistudy
+sys.path.append("/home/mirl/egibbons/noddi")
+
+from noddi_utils import noddistudy
 from utils import display
 
 

@@ -64,7 +64,7 @@ def transition_block_end(x, reduction, name):
     x = BatchNormalization(axis=bn_axis, epsilon=1.001e-5,
                            name=name + '_bn')(x)
     x = Activation('relu', name=name + '_relu')(x)
-    x = Conv2D(3, (1,1), use_bias=False,
+    x = Conv2D(4, (1,1), use_bias=False,
                name=name + '_conv')(x)
 
     return x

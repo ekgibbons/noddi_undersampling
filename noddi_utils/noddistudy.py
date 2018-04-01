@@ -2,10 +2,11 @@ import json
 import os
 import sys
 
-import numpy as np
 from matplotlib import pyplot as plt
-
 import nibabel as nib
+import numpy as np
+
+from utils import matutils
 
 class NoddiData(object):
     """This class initiates an object that will read in the study 
@@ -128,7 +129,90 @@ class NoddiData(object):
         """
 
         return self._return_data("ficvf", return_nifti)
+
+    
+    def get_gfa(self,return_nifti=False):
+        """
+        Returns the FICVF map pixel values
+
+        Arguments
+        ---------
+        return_nifti: bool
+            Whether or not you want the nibabel object or numpy
+            array on return
+
+        Returns
+        -------
+        data:  array_like
+            The 3D gfa map (x, y, z)
+        """
+
+        return matutils.MatReader(self.patient_info["gfa"],
+                                  keyName="GFA")
+
+
+    def get_fa(self,return_nifti=False):
+        """
+        Returns the fractional anistropy map pixel values
+
+        Arguments
+        ---------
+        return_nifti: bool
+            Whether or not you want the nibabel object or numpy
+            array on return
+
+        Returns
+        -------
+        data:  array_like
+            The 3D FA map (x, y, z)
+        """
+
+        return self._return_data("fa", return_nifti)
+
+    
+    def get_md(self,return_nifti=False):
+        """
+        Returns the mean diffusivity map pixel values
+
+        Arguments
+        ---------
+        return_nifti: bool
+            Whether or not you want the nibabel object or numpy
+            array on return
+
+        Returns
+        -------
+        data:  array_like
+            The 3D MD map (x, y, z)
+        """
+
+        md = self._return_data("md", return_nifti)
+        md[md > 1e-8] = 1e-8
         
+        return 1e6*md
+
+
+    def get_ad(self,return_nifti=False):
+        """
+        Returns the AD map pixel values
+
+        Arguments
+        ---------
+        return_nifti: bool
+            Whether or not you want the nibabel object or numpy
+            array on return
+
+        Returns
+        -------
+        data:  array_like
+            The 3D AD map (x, y, z)
+        """
+
+        ad = self._return_data("ad", return_nifti)
+        ad[ad > 1e-8] = 1e-8
+        
+        return 1e6*ad
+    
 
     def _return_data(self, data_type, return_nifti):
 
@@ -143,12 +227,24 @@ class NoddiData(object):
 
         
 def main():
+    from matplotlib import pyplot as plt
+    
+    import noddistudy
+    from utils import display
+    
+    noddi_data = noddistudy.NoddiData("P100716")
 
-    noddi_data = NoddiData("P100716")
+    data = noddi_data.get_adc()
+    print(np.max(data[:,:,13]))
 
-    data = noddi_data.get_fiso()
+    data[data > 5e-8] = 5e-8
+    
+    plt.figure()
+    display.Render(data)
 
-    print(data.shape)
+    plt.figure()
+    plt.imshow(abs(data[:,:,-1-3]))
+    plt.show()
 
 if __name__ == "__main__":
     main()
