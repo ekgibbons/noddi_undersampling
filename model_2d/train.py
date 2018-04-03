@@ -2,15 +2,8 @@ import os
 import sys
 import time 
 
-if (len(sys.argv) == 1) or (sys.argv[1] == "l1"):
-    loss_type = "l1"
-else:
-    loss_type = "perceptual"
-
-if loss_type == "l1":
-    os.environ["CUDA_VISIBLE_DEVICES"]="1"
-else:
-    os.environ["CUDA_VISIBLE_DEVICES"]="0"
+loss_type = "l1"
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -30,22 +23,29 @@ import dense2d
 import models2d
 from noddi_utils import network_utils
 import simple2d
+import unet2d
 from utils import readhd5
 from utils import display
 
 
 print("running network with %s loss" % loss_type)
 
-n_directions = 16
+if (len(sys.argv) == 1) or (sys.argv[1] == "64"):
+    n_directions = 64
+else:
+    n_directions = int(sys.argv[1])
+
 n_gpu = 1
-n_epochs = 200
-batch_size = int(20*16)
+n_epochs = 100
+batch_size = 10
 learning_rate = 1e-3
 
-image_size = (32,32,n_directions)
+image_size = (128,128,n_directions)
 
-model = dense2d.dense_net(image_size)
+# model = dense2d.dense_net(image_size)
 # model = simple2d.simple2d(image_size)
+model = simple2d.res2d(image_size)
+# model = unet2d.unet2d(image_size)
 
 optimizer = Adam(lr=learning_rate)
 if loss_type == "l1":
@@ -63,9 +63,9 @@ y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_2d.h5"
 y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_2d.h5"
 y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_2d.h5"
 y_gfa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_gfa_2d.h5"
-y_md_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_md_2d.h5"
-y_ad_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ad_2d.h5"
-y_fa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fa_2d.h5"
+# y_md_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_md_2d.h5"
+# y_ad_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ad_2d.h5"
+# y_fa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fa_2d.h5"
 
 print("Loading data...")
 

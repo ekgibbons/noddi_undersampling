@@ -32,7 +32,7 @@ def create_patches(data, window_shape, overlap=0.5):
 with open("noddi_metadata.json") as metadata:
     patient_database = json.load(metadata)
 
-subsampling = subsampling.gensamples(16)
+subsampling = subsampling.gensamples(64)
 print(subsampling)
 
 
@@ -58,39 +58,47 @@ for patient_number in sorted(patient_database.keys()):
     data_fiso_temp = noddi_data.get_fiso()[:,:,2:(-1-3),None]
     data_ficvf_temp = noddi_data.get_ficvf()[:,:,2:(-1-3),None]
     data_gfa_temp = noddi_data.get_gfa()[:,:,2:(-1-3),None]
-    data_md_temp = noddi_data.get_md()[:,:,2:(-1-3),None]
-    data_ad_temp = noddi_data.get_ad()[:,:,2:(-1-3),None]
-    data_fa_temp = noddi_data.get_fa()[:,:,2:(-1-3),None]
+    # data_md_temp = noddi_data.get_md()[:,:,2:(-1-3),None]
+    # data_ad_temp = noddi_data.get_ad()[:,:,2:(-1-3),None]
+    # data_fa_temp = noddi_data.get_fa()[:,:,2:(-1-3),None]
     
     data_subsampled_temp = data_full_temp[:,:,:,subsampling]
 
     dim0, dim1, n_slices, n_channels = data_subsampled_temp.shape
 
-    data_window_shape = (32,32,n_slices,n_channels)
-    data_subsampled_temp = create_patches(data_subsampled_temp,
-                                          data_window_shape)
 
-    parameter_window_shape = (32,32,n_slices,1)
-    data_odi_temp = create_patches(data_odi_temp,
-                                   parameter_window_shape)
-
-    data_fiso_temp = create_patches(data_fiso_temp,
-                                   parameter_window_shape)
+    # data_subsampled_temp = data_subsampled_temp.transpose(0,1,3,2)
+    # data_odi_temp = data_odi_temp.transpose(0,1,3,2)
+    # data_fiso_temp = data_fiso_temp.transpose(0,1,3,2)
+    # data_ficvf_temp = data_ficvf_temp.transpose(0,1,3,2)
+    # data_gfa_temp = data_gfa_temp.transpose(0,1,3,2)
     
-    data_ficvf_temp = create_patches(data_ficvf_temp,
-                                   parameter_window_shape)
+    
+    # data_window_shape = (32,32,n_slices,n_channels)
+    # data_subsampled_temp = create_patches(data_subsampled_temp,
+    #                                       data_window_shape)
 
-    data_gfa_temp = create_patches(data_gfa_temp,
-                                   parameter_window_shape)
+    # parameter_window_shape = (32,32,n_slices,1)
+    # data_odi_temp = create_patches(data_odi_temp,
+    #                                parameter_window_shape)
 
-    data_ad_temp = create_patches(data_ad_temp,
-                                   parameter_window_shape)
+    # data_fiso_temp = create_patches(data_fiso_temp,
+    #                                parameter_window_shape)
+    
+    # data_ficvf_temp = create_patches(data_ficvf_temp,
+    #                                parameter_window_shape)
 
-    data_md_temp = create_patches(data_md_temp,
-                                   parameter_window_shape)
+    # data_gfa_temp = create_patches(data_gfa_temp,
+    #                                parameter_window_shape)
 
-    data_fa_temp = create_patches(data_fa_temp,
-                                   parameter_window_shape)
+    # data_ad_temp = create_patches(data_ad_temp,
+    #                                parameter_window_shape)
+
+    # data_md_temp = create_patches(data_md_temp,
+    #                                parameter_window_shape)
+
+    # data_fa_temp = create_patches(data_fa_temp,
+    #                                parameter_window_shape)
 
     for jj in range(1):
 
@@ -99,9 +107,9 @@ for patient_number in sorted(patient_database.keys()):
             data_fiso = data_fiso_temp
             data_ficvf = data_ficvf_temp
             data_gfa = data_gfa_temp
-            data_md = data_md_temp
-            data_ad = data_ad_temp
-            data_fa = data_fa_temp
+            # data_md = data_md_temp
+            # data_ad = data_ad_temp
+            # data_fa = data_fa_temp
             data_subsampled = data_subsampled_temp
 
         else:
@@ -109,9 +117,9 @@ for patient_number in sorted(patient_database.keys()):
             data_fiso_temp = np.rot90(data_fiso_temp,1,(0,1))
             data_ficvf_temp = np.rot90(data_ficvf_temp,1,(0,1))
             data_gfa_temp = np.rot90(data_gfa_temp,1,(0,1))
-            data_md_temp = np.rot90(data_md_temp,1,(0,1))
-            data_ad_temp = np.rot90(data_ad_temp,1,(0,1))
-            data_fa_temp = np.rot90(data_fa_temp,1,(0,1))
+            # data_md_temp = np.rot90(data_md_temp,1,(0,1))
+            # data_ad_temp = np.rot90(data_ad_temp,1,(0,1))
+            # data_fa_temp = np.rot90(data_fa_temp,1,(0,1))
             data_subsampled_temp = np.rot90(data_subsampled_temp,1,(0,1))
 
             data_odi = np.concatenate((data_odi,
@@ -126,15 +134,15 @@ for patient_number in sorted(patient_database.keys()):
             data_gfa = np.concatenate((data_gfa,
                                        data_gfa_temp),
                                       axis=2)
-            data_md = np.concatenate((data_md,
-                                      data_md_temp),
-                                     axis=2)
-            data_ad = np.concatenate((data_ad,
-                                       data_ad_temp),
-                                      axis=2)
-            data_fa = np.concatenate((data_fa,
-                                      data_fa_temp),
-                                     axis=2)
+            # data_md = np.concatenate((data_md,
+            #                           data_md_temp),
+            #                          axis=2)
+            # data_ad = np.concatenate((data_ad,
+            #                            data_ad_temp),
+            #                           axis=2)
+            # data_fa = np.concatenate((data_fa,
+            #                           data_fa_temp),
+            #                          axis=2)
             data_subsampled = np.concatenate((data_subsampled,
                                               data_subsampled_temp),
                                              axis=2)
@@ -144,11 +152,10 @@ for patient_number in sorted(patient_database.keys()):
             data_fiso_temp = data_fiso_temp[::-1,:,:]
             data_ficvf_temp = data_ficvf_temp[::-1,:,:]
             data_gfa_temp = data_gfa_temp[::-1,:,:]
-            data_md_temp = data_md_temp[::-1,:,:]
-            data_ad_temp = data_ad_temp[::-1,:,:]
-            data_fa_temp = data_fa_temp[::-1,:,:]
+            # data_md_temp = data_md_temp[::-1,:,:]
+            # data_ad_temp = data_ad_temp[::-1,:,:]
+            # data_fa_temp = data_fa_temp[::-1,:,:]
             data_subsampled_temp = data_subsampled_temp[::-1,:,:,:]
-
 
     if ii == 0:
         x = data_subsampled.transpose(2,0,1,3)
@@ -156,9 +163,9 @@ for patient_number in sorted(patient_database.keys()):
         y_fiso = data_fiso.transpose(2,0,1,3)
         y_ficvf = data_ficvf.transpose(2,0,1,3)
         y_gfa = data_gfa.transpose(2,0,1,3)
-        y_md = data_md.transpose(2,0,1,3)
-        y_ad = data_ad.transpose(2,0,1,3)
-        y_fa = data_fa.transpose(2,0,1,3)
+        # y_md = data_md.transpose(2,0,1,3)
+        # y_ad = data_ad.transpose(2,0,1,3)
+        # y_fa = data_fa.transpose(2,0,1,3)
         
     else:
         x = np.concatenate((x,
@@ -176,16 +183,17 @@ for patient_number in sorted(patient_database.keys()):
         y_gfa = np.concatenate((y_gfa,
                                 data_gfa.transpose(2,0,1,3)),
                                axis=0)
-        y_md = np.concatenate((y_md,
-                               data_md.transpose(2,0,1,3)),
-                              axis=0)
-        y_ad = np.concatenate((y_ad,
-                                data_ad.transpose(2,0,1,3)),
-                               axis=0)
-        y_fa = np.concatenate((y_fa,
-                               data_fa.transpose(2,0,1,3)),
-                              axis=0)
-        
+        # y_md = np.concatenate((y_md,
+        #                        data_md.transpose(2,0,1,3)),
+        #                       axis=0)
+        # y_ad = np.concatenate((y_ad,
+        #                         data_ad.transpose(2,0,1,3)),
+        #                        axis=0)
+        # y_fa = np.concatenate((y_fa,
+        #                        data_fa.transpose(2,0,1,3)),
+        #                       axis=0)
+
+
     ii += 1
 
 print("The final data shape is: (%i, %i, %i, %i)" % x.shape)
@@ -197,28 +205,29 @@ maxs = np.amax(x_reshape, axis=0)[None, None, None, :]
 x /= maxs
 
 
-max_y = np.array([1.0, 1.0, 1.0,
-                  0.8, 1e-2, 1e-2, 0.8])
+max_y = np.array([1.0, 1.0, 1.0, 0.8])
+                  # 0.8, 1e-2, 1e-2, 0.8])
 
 y_odi[y_odi>max_y[0]] = max_y[0]
 y_fiso[y_fiso>max_y[1]] = max_y[1]
 y_ficvf[y_ficvf>max_y[2]] = max_y[2]
 y_gfa[y_gfa>max_y[3]] = max_y[3]
-y_md[y_md>max_y[4]] = max_y[4]
-y_ad[y_ad>max_y[5]] = max_y[5]
-y_fa[y_fa>max_y[6]] = max_y[6]
+# y_md[y_md>max_y[4]] = max_y[4]
+# y_ad[y_ad>max_y[5]] = max_y[5]
+# y_fa[y_fa>max_y[6]] = max_y[6]
 
 y_odi /= max_y[0]
 y_fiso /= max_y[1]
 y_ficvf /= max_y[2]
 y_gfa /= max_y[3]
-y_md /= max_y[4]
-y_ad /= max_y[5]
-y_fa /= max_y[6]
+# y_md /= max_y[4]
+# y_ad /= max_y[5]
+# y_fa /= max_y[6]
 
 
 ### SAVING ###
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_2d.h5","w")
+hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_2d.h5" %
+               len(subsampling),"w")
 hf.create_dataset("max_values", data=maxs)
 hf.close
 
@@ -247,17 +256,17 @@ hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_gfa_2d.h5","w")
 hf.create_dataset("y_gfa",data=y_gfa)
 hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_md_2d.h5","w")
-hf.create_dataset("y_md",data=y_md)
-hf.close
+# hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_md_2d.h5","w")
+# hf.create_dataset("y_md",data=y_md)
+# hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ad_2d.h5","w")
-hf.create_dataset("y_ad",data=y_ad)
-hf.close
+# hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ad_2d.h5","w")
+# hf.create_dataset("y_ad",data=y_ad)
+# hf.close
 
-hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fa_2d.h5","w")
-hf.create_dataset("y_fa",data=y_fa)
-hf.close
+# hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fa_2d.h5","w")
+# hf.create_dataset("y_fa",data=y_fa)
+# hf.close
 
 
 plt.figure()

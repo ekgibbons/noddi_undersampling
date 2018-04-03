@@ -38,7 +38,7 @@ def perceptual_loss(y_true, y_predict):
     loss_model.trainable = False
 
     loss = 0
-    for ii in range(2):
+    for ii in range(4):
         y_true_slice = tf.expand_dims(y_true[:,:,:,ii],-1)
         y_true_rgb = tf.image.grayscale_to_rgb(y_true_slice,
                                                name=None)

@@ -57,20 +57,20 @@ for filename in filenames_full:
         continue
 
 
-    dti_maps = [dti_file for dti_file in filenames_dti if patient_number in dti_file]
-    try:
-        patient_dict["fa"] = [fa_file for fa_file in dti_maps if "fa." in fa_file][0]
-        patient_dict["md"] = [md_file for md_file in dti_maps if "md." in md_file][0]
-    except:
-        print("WARNING:  dti files missing for case %s" % patient_number)
-        continue
+    # dti_maps = [dti_file for dti_file in filenames_dti if patient_number in dti_file]
+    # try:
+    #     patient_dict["fa"] = [fa_file for fa_file in dti_maps if "fa." in fa_file][0]
+    #     patient_dict["md"] = [md_file for md_file in dti_maps if "md." in md_file][0]
+    # except:
+    #     print("WARNING:  dti files missing for case %s" % patient_number)
+    #     continue
 
-    ad_maps = [ad_file for ad_file in filenames_ad if patient_number in ad_file]
-    try:
-        patient_dict["ad"] = [ad_file for ad_file in ad_maps if "ad." in ad_file][0]
-    except:
-        print("WARNING:  ad files missing for case %s" % patient_number)
-        continue
+    # ad_maps = [ad_file for ad_file in filenames_ad if patient_number in ad_file]
+    # try:
+    #     patient_dict["ad"] = [ad_file for ad_file in ad_maps if "ad." in ad_file][0]
+    # except:
+    #     print("WARNING:  ad files missing for case %s" % patient_number)
+    #     continue
     
         
     patients[patient_number] = patient_dict

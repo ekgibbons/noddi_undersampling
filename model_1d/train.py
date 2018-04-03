@@ -20,7 +20,10 @@ from noddi_utils import network_utils
 from utils import display
 from utils import readhd5
 
-n_channels = 16
+if (len(sys.argv) == 1) or (sys.argv[1] == "64"):
+    n_channels = 64
+else:
+    n_channels = int(sys.argv[1])
 
 n_gpu = 1
 n_epochs = 100
@@ -43,9 +46,9 @@ y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_1d.h5"
 y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_1d.h5"
 y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_1d.h5"
 y_gfa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_gfa_1d.h5"
-y_md_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_md_1d.h5"
-y_ad_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ad_1d.h5"
-y_fa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fa_1d.h5"
+# y_md_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_md_1d.h5"
+# y_ad_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ad_1d.h5"
+# y_fa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fa_1d.h5"
 
 print("Loading data...")
 x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_channels)
@@ -53,9 +56,9 @@ y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
 y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
 y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
 y_gfa = readhd5.ReadHDF5(y_gfa_path,"y_gfa")
-y_md = readhd5.ReadHDF5(y_md_path,"y_md")
-y_ad = readhd5.ReadHDF5(y_ad_path,"y_ad")
-y_fa = readhd5.ReadHDF5(y_fa_path,"y_fa")
+# y_md = readhd5.ReadHDF5(y_md_path,"y_md")
+# y_ad = readhd5.ReadHDF5(y_ad_path,"y_ad")
+# y_fa = readhd5.ReadHDF5(y_fa_path,"y_fa")
 print("Data is loaded...")
 
 n_samples, _ = x.shape

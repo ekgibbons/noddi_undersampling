@@ -2,8 +2,6 @@ import os
 import sys
 import time
 
-os.environ["CUDA_VISIBLE_DEVICES"] = "1"
-
 import keras
 from keras.optimizers import Adam
 import numpy as np
@@ -11,16 +9,21 @@ import numpy as np
 sys.path.append("/home/mirl/egibbons/noddi")
 from golkov_multi import model1d
 from model_2d import dense2d
+from model_2d import simple2d
+from model_2d import unet2d
 from noddi_utils import noddistudy
 from noddi_utils import subsampling
 from utils import display
 from utils import readhd5
 
-def model_2d(data,n_directions):
+def model_2d(data,n_directions,loss_type="l1"):
 
     image_size = (128,128,n_directions)
-    loss_type = "l1"
-    model = dense2d.dense_net(image_size)
+
+    # model = dense2d.dense_net(image_size)
+    # model = simple2d.simple2d(image_size)
+    model = simple2d.res2d(image_size)
+    # model = unet2d.unet2d(image_size)
     model.compile(optimizer=Adam(lr=1e-3),
                   loss="mean_absolute_error",
                   metrics=["accuracy"])
@@ -29,7 +32,8 @@ def model_2d(data,n_directions):
     print("2D dense model loaded.  Using %s loss" % loss_type)
 
     
-    max_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_2d.h5"
+    max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_2d.h5" %
+                n_directions)
     maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
 
     max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
@@ -47,19 +51,22 @@ def model_2d(data,n_directions):
     print("Predictions completed...took: %f" % (time.time() - start))
 
     ### DISPLAY ###
-    slice_use = 25
-    
+
+    diffusivity_scaling = 1
     for ii in range(4):
         prediction[:,:,:,ii] *= max_y[ii]
 
+    prediction[:,:,:,3] /= diffusivity_scaling
+        
     return prediction
         
 def golkov_multi(data, n_directions):
 
-    max_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_1d.h5"
+    max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_1d.h5" %
+                n_directions)
     maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
 
-    max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
+    max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_1d.h5"
     max_y = readhd5.ReadHDF5(max_y_path,"max_y")
     
     subsampling_pattern = subsampling.gensamples(n_directions)
@@ -84,30 +91,39 @@ def golkov_multi(data, n_directions):
     print("Predicting...")
     start = time.time()
     
-    running_sum = data_subsampled.size
-    for kk in range(n_slices):
+    # running_sum = data_subsampled.size
+    # for kk in range(n_slices):
         # running_sum += np.sum(data_subsampled[:,:,kk,0] > 1e-8)
         
-        x = np.zeros((running_sum, n_directions))
-        location = np.zeros((running_sum,3))
-        
-        ll = 0
-        for ii in range(dim0):
-            for jj in range(dim1):
-                for kk in range(n_slices):
-                    if data_subsampled[ii,jj,kk,0] > 1e-8:
-                        x[ll,:] = data_subsampled[ii,jj,kk,:]
-                        location[ll,:] = np.array([ii, jj, kk])
-                        ll += 1
+    # x = np.zeros((running_sum, n_directions))
+    # location = np.zeros((running_sum,3))
+    
+    # ll = 0
+    # for ii in range(dim0):
+    #     for jj in range(dim1):
+    #         for kk in range(n_slices):
+    #             # if data_subsampled[ii,jj,kk,0] > 1e-8:
+    #             x[ll,:] = data_subsampled[ii,jj,kk,:]
+    #             location[ll,:] = np.array([ii, jj, kk])
+    #             ll += 1
 
+    # data_subsampled_temp = data_subsampled.reshape(0,1)
+    x = data_subsampled.reshape(n_slices*dim0*dim1, -1)
+    print(x.shape)
+    print(x.size)
+    
     recon = model.predict(x, batch_size=10000)
-
-    prediction = np.zeros((dim0,dim1,n_slices,4))
-    for ll in range(running_sum):
-        ii = int(location[ll,0])
-        jj = int(location[ll,1])
-        kk = int(location[ll,2])
-        prediction[ii,jj,kk,:] = recon[ll,:]
+    print(recon.shape)
+    print(recon.size)
+    
+    prediction = recon.reshape(dim0, dim1, n_slices, 4)
+    
+    # prediction = np.zeros((dim0,dim1,n_slices,4))
+    # for ll in range(running_sum):
+    #     ii = int(location[ll,0])
+    #     jj = int(location[ll,1])
+    #     kk = int(location[ll,2])
+    #     prediction[ii,jj,kk,:] = recon[ll,:]
 
     for ii in range(4):
         prediction[:,:,:,ii] *= max_y[ii]
