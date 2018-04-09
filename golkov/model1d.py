@@ -13,17 +13,7 @@ def fc_1d(input_shape):
     model.add(Dense(150,activation="relu"))
     model.add(Dropout(0.1))
 
-    
-    # model.add(Dense(512,activation="relu"))
-    # model.add(Dropout(0.2))
-        
-    # model.add(Dense(1024,activation="relu"))
-    # model.add(Dropout(0.2))
-        
-    # model.add(Dense(512,activation="relu"))
-    # model.add(Dropout(0.2))
-
-    model.add(Dense(1,activation="relu"))
+    model.add(Dense(1,activation="linear"))
     
     return model
 

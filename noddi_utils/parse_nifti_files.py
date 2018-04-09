@@ -28,15 +28,23 @@ patients = {}
 
 num_patients = len(filenames_full)
 
+test_cases = ["P081114","P093014","P032315","P061815",
+              "P020916","N011118A","N011118B"]
+
+avoid_cases = ["P041714"]
+
 ii = 0
 for filename in filenames_full:
-    
+
     filename_base = ntpath.basename(filename)
     if filename_base[7] is not "_":
         patient_number = filename_base[:8]
     else:
         patient_number = filename_base[:7]
 
+    if patient_number in avoid_cases:
+        continue
+        
     patient_dict = {}
     patient_dict["full"] = filename
 
@@ -75,14 +83,15 @@ for filename in filenames_full:
         
     patients[patient_number] = patient_dict
 
-    if (patient_number == "P111816") or (patient_number == "P080715"):
+
+    if patient_number in test_cases:
         patient_dict["data_type"] = "test"
     else:
         patient_dict["data_type"] = "train"
     
     ii += 1
 
-print(len(patients))
+print("We have %i patients" % len(patients))
 
 json_filename = "noddi_metadata.json"
 

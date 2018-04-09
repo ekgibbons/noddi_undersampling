@@ -1,96 +1,105 @@
 import os
-os.environ["CUDA_VISIBLE_DEVICES"]="0"
+import sys
+os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
+from keras import backend as K
+from keras.callbacks import EarlyStopping
+from keras.callbacks import ModelCheckpoint
+from keras.callbacks import ReduceLROnPlateau
+from keras.callbacks import TensorBoard
+from keras.optimizers import Adam, SGD
+from keras.utils import to_categorical
+from keras.utils.training_utils import multi_gpu_model
 import numpy as np
 from matplotlib import pyplot as plt
-
 import tensorflow as tf
-from keras.optimizers import Adam, SGD
-from keras.utils.training_utils import multi_gpu_model
-from keras import backend as K
-from keras.callbacks import TensorBoard, ModelCheckpoint, ReduceLROnPlateau
-from keras.utils import to_categorical
-
-from utils import readhd5
-from utils import display
 
 import model1d
+from utils import display
+from utils import readhd5
 
-# need to use this when I require batches from an already memory-loaded X, y
-def batch_generator(X, y, batch_size):
-    batch_i = 0
-    while 1:
-        if (batch_i+1)*batch_size >= len(X):
-            yield X[batch_i*batch_size:], y[batch_i*batch_size:]
-            batch_i = 0
-        else:
-            yield (X[batch_i*batch_size:(batch_i+1)*batch_size],
-                   y[batch_i*batch_size:(batch_i+1)*batch_size])
-            batch_i += 1
 
-n_gpu = 1
-n_epochs = 200
-batch_size = 10000
-learning_rate = 1e-3
-
-image_size = (64,)
-
-model = model1d.fc_1d(image_size)
+def train(n_directions):
+    print("running network with %i directions" % n_directions)
     
-optimizer = SGD(lr=learning_rate,
-                momentum=0.9)
+    n_gpu = 1
+    n_epochs = 100
+    batch_size = 10000
+    learning_rate = 1e-3
+    
+    image_size = (n_directions,)
+    
+    model = model1d.fc_1d(image_size)
+    
+    optimizer = Adam(lr=learning_rate)
+    
+    model.compile(optimizer=optimizer,
+                  loss="mean_squared_error",
+    )
+    
+    x_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_1d.h5" 
+              % n_directions)
+    y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_1d.h5"
+    
+    print("Loading data...")
+    x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_directions)
+    y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
+    print("Data is loaded...")
 
-model.compile(optimizer=optimizer,
-              loss="mean_absolute_error",
-              )
+    n_samples, _ = x.shape
+    
+    y = y_odi
 
-x_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/x_64_directions_1d.h5"
-y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_1d.h5"
-y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_1d.h5"
-y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_1d.h5"
+    batch_size_multi_gpu = n_gpu*batch_size
+    
+    tensorboard = TensorBoard(log_dir='./logs',
+                              histogram_freq=1,
+                              batch_size=batch_size_multi_gpu,
+                              write_graph=True,
+                              write_grads=True,
+                              write_images=True,
+                              embeddings_freq=0,
+                              embeddings_layer_names=None,
+                              embeddings_metadata=None)
 
-print("Loading data...")
-x = readhd5.ReadHDF5(x_path,"x_64_directions")
-y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
-y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
-y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
-print("Data is loaded...")
+    save_path = ("/v/raid1b/egibbons/models/noddi-%i_golkov.h5" %
+                 n_directions)
+    checkpointer = ModelCheckpoint(filepath=save_path,
+                                   verbose=1, monitor="val_loss", save_best_only=True,
+                                   save_weights_only=True, period=25)
+    
+    reduce_lr = ReduceLROnPlateau(monitor="val_loss", factor=0.1,
+                                  patience=5, min_lr=1e-7) 
 
-n_samples, _ = x.shape
+    stopping = EarlyStopping(monitor='val_loss', min_delta=0,
+                             patience=30, verbose=0, mode='auto')
+    
+    model.fit(x=x,
+              y=y,
+              batch_size=batch_size_multi_gpu,
+              epochs=n_epochs,
+              verbose=2,
+              callbacks=[checkpointer, reduce_lr, stopping],
+              validation_split=0.2,
+              shuffle=True,
+    )
 
-y = y_odi
+    print("trained %i model successfully" % n_directions)
+    print("\n")
 
-print(np.amax(y))
-print(np.amin(y))
+def main(argv):
 
-batch_size_multi_gpu = n_gpu*batch_size
+    if (len(argv) == 1) or (argv[1] == "64"):
+        n_directions = 64
+    else:
+        n_directions = int(argv[1])
+    
+    train(n_directions)
 
-tensorboard = TensorBoard(log_dir='./logs',
-                          histogram_freq=1,
-                          batch_size=batch_size_multi_gpu,
-                          write_graph=True,
-                          write_grads=True,
-                          write_images=True,
-                          embeddings_freq=0,
-                          embeddings_layer_names=None,
-                          embeddings_metadata=None)
+    
+if __name__ == "__main__":
 
-checkpointer = ModelCheckpoint(filepath="/v/raid1b/egibbons/models/noddi-64_golkov.h5",
-                               verbose=1, monitor="val_loss", save_best_only=True,
-                               save_weights_only=True, period=25)
+    main(sys.argv)
+    
 
-                               
-
-reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.9,
-                              patience=5, min_lr=1e-7) 
-
-model.fit(x=x,
-          y=y,
-          batch_size=batch_size_multi_gpu,
-          epochs=n_epochs,
-          verbose=1,
-          callbacks=[checkpointer, reduce_lr],
-          validation_split=0.2,
-          shuffle=True,
-          )
 

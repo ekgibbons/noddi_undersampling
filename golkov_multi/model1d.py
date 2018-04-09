@@ -14,7 +14,7 @@ def fc_1d(input_shape):
     model.add(Dense(150,activation="relu"))
     model.add(Dropout(0.1))
 
-    model.add(Dense(4,activation="relu"))
+    model.add(Dense(4,activation="linear"))
     
     return model
 

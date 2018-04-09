@@ -32,14 +32,14 @@ def res2d(input_size):
                padding="same")(img_input)
 
     x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x)
-    x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x)
+    x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x1)
 
     x = Add()([x,x1])
 
     x = Conv2D(256,(1,1),activation="relu",padding="same")(x)
 
     x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
-    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x2)
 
     x = Add()([x,x2])
 
