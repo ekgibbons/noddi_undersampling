@@ -20,14 +20,14 @@ with open("noddi_metadata.json") as metadata:
     patient_database = json.load(metadata)
 print("We have %i cases" % len(patient_database))
 
-directions = [128, 64, 32, 16]
+directions = [128, 64, 32, 24, 16, 8]
 
 ### MAIN LOOP ###
 
 for num_directions in directions:
     print("Generating 1D data for %i directions" % num_directions)
 
-    subsampling_indices = subsampling.gensamples(num_directions, shuffle=False)
+    subsampling_indices = subsampling.gensamples(num_directions)
 
     num_cases = len(patient_database)
     
@@ -37,7 +37,8 @@ for num_directions in directions:
 
         noddi_data = noddistudy.NoddiData(patient_number)
 
-        if noddi_data.get_type() == "test":
+        if (noddi_data.get_type() == "test" or
+            noddi_data.get_type() == "duplicate"):
             continue
     
         print("Currently reading: %s as %s data" %

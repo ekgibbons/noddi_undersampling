@@ -33,13 +33,15 @@ with open("noddi_metadata.json") as metadata:
     patient_database = json.load(metadata)
 print("We have %i cases" % len(patient_database))
 
-directions = [128, 64, 32, 24, 16, 8]
+seeds = [100, 225, 300, 325, 400, 425, 500, 525, 600]
 
 ### MAIN LOOP ###
-for num_directions in directions:
+for random_seed in seeds:
+    num_directions = 24
     print("Generating 2D data for %i directions" % num_directions)
     
-    subsampling_indices = subsampling.gensamples(num_directions)
+    subsampling_indices = subsampling.gensamples(num_directions,
+                                                 random_seed=random_seed)
 
     print("Processing %i directions" % len(subsampling_indices))
     
@@ -53,7 +55,8 @@ for num_directions in directions:
         if (noddi_data.get_type() == "test" or
             noddi_data.get_type() == "duplicate"):
             continue
-    
+
+        
         print("Currently reading: %s as %s data" %
               (patient_number, noddi_data.get_type()))
 
@@ -107,26 +110,6 @@ for num_directions in directions:
                 data_gfa_temp = data_gfa_temp[::-1,:,:]
                 data_subsampled_temp = data_subsampled_temp[::-1,:,:,:]
 
-
-        # data_window_shape = (64,64,n_slices,n_channels)
-        # data_subsampled = create_patches(data_subsampled,
-        #                                  data_window_shape)
-        
-        # parameter_window_shape = (64,64,n_slices,1)
-        # data_odi = create_patches(data_odi_temp,
-        #                           parameter_window_shape)
-        
-        # data_fiso = create_patches(data_fiso_temp,
-        #                            parameter_window_shape)
-        
-        # data_ficvf = create_patches(data_ficvf_temp,
-        #                             parameter_window_shape)
-        
-        # data_gfa = create_patches(data_gfa_temp,
-        #                           parameter_window_shape)
-
-
-              
         if ii == 0:
             x = data_subsampled.transpose(2,0,1,3)
             y_odi = data_odi.transpose(2,0,1,3)
@@ -174,8 +157,8 @@ for num_directions in directions:
     y_gfa /= max_y[3]
 
     ### SAVING ###
-    hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_2d.h5" %
-                   num_directions,"w")
+    hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_%i_seed_2d.h5" %
+                   (num_directions, random_seed),"w")
     hf.create_dataset("max_values", data=maxs)
     hf.close
     
@@ -183,8 +166,8 @@ for num_directions in directions:
     hf.create_dataset("max_y", data=max_y)
     hf.close
     
-    hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_2d.h5" %
-                   num_directions,"w")
+    hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_%i_seed_2d.h5" %
+                   (num_directions, random_seed),"w")
     hf.create_dataset("x_%i_directions" % num_directions, data=x)
     hf.close
 

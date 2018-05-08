@@ -21,48 +21,18 @@ from keras.utils.training_utils import multi_gpu_model
 
 sys.path.append("/home/mirl/egibbons/noddi")
 
-import dense2d
-import models2d
+from model_2d import simple2d
 from noddi_utils import network_utils
-import simple2d
-import unet2d
 from utils import readhd5
 from utils import display
 
-def augmentation(x, y):
+def train(random_seed):
 
-    datagen_args = dict(
-        rotation_range=20,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        horizontal_flip=True,
-        vertical_flip=True,
-        shear_range=0.2,
-        zoom_range=0.2
-        )
-
-    image_datagen = ImageDataGenerator(**datagen_args)
-    target_datagen = ImageDataGenerator(**datagen_args)
-
-    seed = 1
-    image_datagen.fit(x, augment=True, seed=seed)
-    target_datagen.fit(y, augment=True, seed=seed)
+    n_directions = 24
     
-    image_generator = image_datagen.flow(x, shuffle=False,
-                                         batch_size=9, seed=seed)
-    target_generator = image_datagen.flow(y, shuffle=False,
-                                          batch_size=9, seed=seed)
+    print("running 2D network with %s loss and %i sampling"
+          % (loss_type, random_seed))
     
-    generator = zip(image_generator, target_generator)
-
-    return generator
-
-def train(n_directions):
-    
-    print("running 2D network with %s loss and %i directions"
-          % (loss_type, n_directions))
-    
-
     n_gpu = 1
     n_epochs = 100
     batch_size = 10
@@ -71,7 +41,6 @@ def train(n_directions):
     image_size = (128,128,n_directions)
     
     model = simple2d.res2d(image_size)
-
 
     optimizer = Adam(lr=learning_rate)
     if loss_type == "l1":
@@ -82,8 +51,8 @@ def train(n_directions):
                       loss=network_utils.perceptual_loss)
 
     ### DATA LOADING ###
-    x_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_2d.h5" %
-              n_directions)
+    x_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_%i_seed_2d.h5" %
+              (n_directions, random_seed))
     y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_2d.h5"
     y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_2d.h5"
     y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_2d.h5"
@@ -106,6 +75,8 @@ def train(n_directions):
     
     print("Data is loaded...took: %f seconds" % (time.time() - start))
 
+    print(x.shape)
+    print(y.shape)
 
     ### MODEL FITTING ###
     batch_size_multi_gpu = n_gpu*batch_size
@@ -120,8 +91,8 @@ def train(n_directions):
                               embeddings_layer_names=None,
                               embeddings_metadata=None)
     
-    save_path = ("/v/raid1b/egibbons/models/noddi-%i_2d_%s.h5"
-                 % (n_directions, loss_type))
+    save_path = ("/v/raid1b/egibbons/models/noddi-%i_%i_seed_2d.h5"
+                 % (n_directions, random_seed))
     print("saving to: %s" % save_path)
     checkpointer = ModelCheckpoint(filepath=save_path,
                                    verbose=1,
@@ -141,19 +112,19 @@ def train(n_directions):
               y=y,
               batch_size=batch_size_multi_gpu,
               epochs=n_epochs,
-              verbose=1,
+              verbose=2,
               callbacks=[checkpointer, lrate, stopping],
               validation_split=0.2,
               shuffle=True,
     )
 
-    print("trained %i direction model" % n_directions)
+    print("trained %i sampling model" % random_seed)
 
     
 def main(argv):
 
-    if (len(argv) == 1) or (argv[1] == "24"):
-        n_directions = 24
+    if (len(argv) == 1) or (argv[1] == "100"):
+        n_directions = 100
     else:
         n_directions = int(argv[1])
     

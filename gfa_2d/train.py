@@ -2,7 +2,6 @@ import os
 import sys
 import time 
 
-loss_type = "l1"
 os.environ["CUDA_VISIBLE_DEVICES"]="1"
 
 import numpy as np
@@ -16,48 +15,17 @@ from keras.callbacks import ModelCheckpoint
 from keras.callbacks import ReduceLROnPlateau
 from keras.callbacks import TensorBoard
 from keras.optimizers import Adam
-from keras.preprocessing.image import ImageDataGenerator
-from keras.utils.training_utils import multi_gpu_model
 
 sys.path.append("/home/mirl/egibbons/noddi")
 
-import dense2d
-import models2d
 from noddi_utils import network_utils
 import simple2d
-import unet2d
 from utils import readhd5
 from utils import display
 
-def augmentation(x, y):
-
-    datagen_args = dict(
-        rotation_range=20,
-        width_shift_range=0.2,
-        height_shift_range=0.2,
-        horizontal_flip=True,
-        vertical_flip=True,
-        shear_range=0.2,
-        zoom_range=0.2
-        )
-
-    image_datagen = ImageDataGenerator(**datagen_args)
-    target_datagen = ImageDataGenerator(**datagen_args)
-
-    seed = 1
-    image_datagen.fit(x, augment=True, seed=seed)
-    target_datagen.fit(y, augment=True, seed=seed)
-    
-    image_generator = image_datagen.flow(x, shuffle=False,
-                                         batch_size=9, seed=seed)
-    target_generator = image_datagen.flow(y, shuffle=False,
-                                          batch_size=9, seed=seed)
-    
-    generator = zip(image_generator, target_generator)
-
-    return generator
-
 def train(n_directions):
+
+    loss_type = "l1"
     
     print("running 2D network with %s loss and %i directions"
           % (loss_type, n_directions))
@@ -84,28 +52,18 @@ def train(n_directions):
     ### DATA LOADING ###
     x_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/x_%i_directions_2d.h5" %
               n_directions)
-    y_odi_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_odi_2d.h5"
-    y_fiso_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_fiso_2d.h5"
-    y_ficvf_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_ficvf_2d.h5"
     y_gfa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_gfa_2d.h5"
 
     print("Loading data...")
 
     start = time.time()
-    y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
-    y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
-    y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
     y_gfa = readhd5.ReadHDF5(y_gfa_path,"y_gfa")
 
-    diffusivity_scaling = 1
-    y = np.concatenate((y_odi, y_fiso, y_ficvf,
-                        diffusivity_scaling*y_gfa),
-                       axis=3)
+    y = y_gfa
     
     x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_directions)
     
     print("Data is loaded...took: %f seconds" % (time.time() - start))
-
 
     ### MODEL FITTING ###
     batch_size_multi_gpu = n_gpu*batch_size
@@ -120,8 +78,8 @@ def train(n_directions):
                               embeddings_layer_names=None,
                               embeddings_metadata=None)
     
-    save_path = ("/v/raid1b/egibbons/models/noddi-%i_2d_%s.h5"
-                 % (n_directions, loss_type))
+    save_path = ("/v/raid1b/egibbons/models/noddi-%i_2d_gfa_no_scale.h5"
+                 % (n_directions))
     print("saving to: %s" % save_path)
     checkpointer = ModelCheckpoint(filepath=save_path,
                                    verbose=1,
@@ -136,12 +94,12 @@ def train(n_directions):
 
     stopping = EarlyStopping(monitor='val_loss', min_delta=0,
                              patience=20, verbose=0, mode='auto')
-    
+     
     model.fit(x=x,
               y=y,
               batch_size=batch_size_multi_gpu,
               epochs=n_epochs,
-              verbose=1,
+              verbose=2,
               callbacks=[checkpointer, lrate, stopping],
               validation_split=0.2,
               shuffle=True,
@@ -152,8 +110,8 @@ def train(n_directions):
     
 def main(argv):
 
-    if (len(argv) == 1) or (argv[1] == "24"):
-        n_directions = 24
+    if (len(argv) == 1) or (argv[1] == "64"):
+        n_directions = 64
     else:
         n_directions = int(argv[1])
     

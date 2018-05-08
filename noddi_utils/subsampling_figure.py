@@ -12,7 +12,8 @@ from utils import display
 
 
 def gensamples(num_samples, patient_number="N011618",
-               shuffle=False, verbose=False, plot=False):
+               shuffle=False, verbose=False, plot=False,
+               random_seed=500):
     """Sampling pattern generator for the directions in DSI study.
 
     Parameters
@@ -61,18 +62,7 @@ def gensamples(num_samples, patient_number="N011618",
             for jj in range(bvalues.shape[0]):
                 directions[jj,ii] = bvalues[jj]*float(lines[ii].split()[jj])
 
-                
-    # bvecs = np.array(line)
-    # print(bvalues.shape)
-    # print(bvecs.shape)
-
-    # print(bvecs)
-    
-    # num_bins = 30
-    
-    # plt.figure()
-    # plt.hist(bvalues, num_bins,alpha=0.5)
-    
+                 
     # now divide the directions into shells
     shell1_divide = 1000
     shell2_divide = 2000
@@ -93,20 +83,33 @@ def gensamples(num_samples, patient_number="N011618",
         elif (shell2_divide < bvalues[ii]):
             bvalue_dict["shell3"].append(ii)
 
-    num_b0 = round(num_samples*len(bvalue_dict["b0"])/bvalues.shape[0])
-    num_shell1 = round(num_samples*len(bvalue_dict["shell1"])/bvalues.shape[0])
-    num_shell2 = round(num_samples*len(bvalue_dict["shell2"])/bvalues.shape[0])
-    num_shell3 = num_samples - (num_b0 + num_shell1 + num_shell2)
+    if random_seed < 500:
+        num_b0 = round(num_samples*len(bvalue_dict["b0"])/bvalues.shape[0])
+        num_shell1 = round(num_samples*len(bvalue_dict["shell1"])/bvalues.shape[0])
+        num_shell2 = round(num_samples*len(bvalue_dict["shell2"])/bvalues.shape[0])
+        num_shell3 = num_samples - (num_b0 + num_shell1 + num_shell2)
 
-    np.random.seed(seed=100)
-    b0 = np.random.choice(bvalue_dict["b0"], num_b0, replace=False)
-    shell1 = np.random.choice(bvalue_dict["shell1"], num_shell1, replace=False)
-    shell2 = np.random.choice(bvalue_dict["shell2"], num_shell2, replace=False)
-    shell3 = np.random.choice(bvalue_dict["shell3"], num_shell3, replace=False)
-    
-    subsampling = np.concatenate((b0,shell1,shell2,shell3),
-                                 axis=0)
+        np.random.seed(seed=random_seed)
+        b0 = np.random.choice(bvalue_dict["b0"], num_b0, replace=False)
+        shell1 = np.random.choice(bvalue_dict["shell1"], num_shell1, replace=False)
+        shell2 = np.random.choice(bvalue_dict["shell2"], num_shell2, replace=False)
+        shell3 = np.random.choice(bvalue_dict["shell3"], num_shell3, replace=False)
+        
+        subsampling = np.concatenate((b0,shell1,shell2,shell3),
+                                     axis=0)
 
+    else:
+        num_b0 = round(num_samples*len(bvalue_dict["b0"])/bvalues.shape[0])
+        num_shell1 = round(num_samples*len(bvalue_dict["shell1"])/bvalues.shape[0])
+        num_shell2 = num_samples - (num_b0 + num_shell1)
+
+        np.random.seed(seed=random_seed)
+        b0 = np.random.choice(bvalue_dict["b0"], num_b0, replace=False)
+        shell1 = np.random.choice(bvalue_dict["shell1"], num_shell1, replace=False)
+        shell2 = np.random.choice(bvalue_dict["shell2"], num_shell2, replace=False)
+        
+        subsampling = np.concatenate((b0,shell1,shell2),
+                                     axis=0)
 
     directions_used = np.zeros((num_samples, 3))
     directions_total = np.zeros((directions.shape[0] - num_samples, 3))
@@ -158,31 +161,49 @@ def gensamples(num_samples, patient_number="N011618",
     return directions_used, directions_total
 
 def main():
-    list_directions = [128, 64, 32, 16]
+    from matplotlib import rcParams
+    rcParams['font.sans-serif'] = ['Verdana']
 
+    params = {'font.size': 14,
+              'ytick.labelsize': 14,
+              'xtick.labelsize': 14}
+
+    
+    rcParams.update(params)
+
+
+
+    
+    list_directions = [24]
+    list_seeds = [100, 200, 300, 400, 500, 600]
+    colors = ["blue","yellow","green","red","violet","orange"] 
+    
     color_red = np.array([[220, 50, 47]])/255
     color_blue = np.array([[38, 139, 210]])/255
     
     for n_directions in list_directions:
-        directions_used, directions_total = gensamples(n_directions)
-
-        fig = plt.figure()
-        ax = fig.add_subplot(111,projection="3d")
+        ii = 0
+        for seed in list_seeds:
+            directions_used, directions_total = gensamples(n_directions,random_seed=seed)
+            
+            fig = plt.figure()
+            ax = fig.add_subplot(111,projection="3d")
+            
+            ax.scatter(directions_used[:,0],directions_used[:,1],directions_used[:,2],
+                       c=display.get_color(colors[ii]), marker="o")
+            
+            ax.scatter(directions_total[:,0],directions_total[:,1],directions_total[:,2],
+                       c=display.get_color("grey"), marker="o")
+            
         
-        ax.scatter(directions_used[:,0],directions_used[:,1],directions_used[:,2],
-                   c=color_red, marker="o")
+          
+            plt.savefig("sampling_%i_directions_seed_%i.pdf"
+                        % (n_directions, seed),
+                        bbox_inches="tight")
 
-        ax.scatter(directions_total[:,0],directions_total[:,1],directions_total[:,2],
-                   c=color_blue, marker="o")
-                
-        
-        ax.set_xlabel("x")
-        ax.set_ylabel("y")
-        ax.set_zlabel("z")
-
-        plt.savefig("sampling_%i_directions.pdf" % n_directions,
-                    bbox_inches="tight")
-        plt.show()
+            ii += 1
+            
+    plt.show()
 
     
 if __name__ == "__main__":

@@ -43,34 +43,12 @@ def res2d(input_size):
 
     x = Add()([x,x2])
 
-    out = Conv2D(4,(1,1),activation="linear",padding="same")(x)
+    out = Conv2D(1,(1,1),activation="linear",padding="same")(x)
 
     model = Model(inputs=[img_input], outputs=[out])
 
     return model
     
-
-def simple2d(input_size):
-
-    model = Sequential()
-
-    model.add(Conv2D(128,(3,3),input_shape=input_size,activation="relu",
-                     padding="same"))
-    model.add(Dropout(0.1))
-
-    model.add(Conv2D(256,(3,3),activation="relu",
-                     padding="same"))
-    model.add(Dropout(0.1))
-
-    model.add(Conv2D(512,(3,3),activation="relu",
-                     padding="same"))
-    model.add(Dropout(0.1))
-
-    model.add(Conv2D(4,(1,1),activation="relu",
-                     padding="same"))
-
-    return model
-
 def main():
 
     image_size = (128, 128, 64)

@@ -11,7 +11,8 @@ from utils import display
 
 
 def gensamples(num_samples, patient_number="N011618",
-               shuffle=False, verbose=False, plot=False):
+               shuffle=False, verbose=False, plot=False,
+               random_seed=400):
     """Sampling pattern generator for the directions in DSI study.
 
     Parameters
@@ -34,8 +35,6 @@ def gensamples(num_samples, patient_number="N011618",
         1D array of the sampling indices
     """
 
-
-    
     path_to_data = ("/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/"
                     "Stroke_patients/Stroke_DSI_Processing/Data/Bvals")
     
@@ -74,20 +73,33 @@ def gensamples(num_samples, patient_number="N011618",
         elif (shell2_divide < bvalues[ii]):
             bvalue_dict["shell3"].append(ii)
 
-    num_b0 = round(num_samples*len(bvalue_dict["b0"])/bvalues.shape[0])
-    num_shell1 = round(num_samples*len(bvalue_dict["shell1"])/bvalues.shape[0])
-    num_shell2 = round(num_samples*len(bvalue_dict["shell2"])/bvalues.shape[0])
-    num_shell3 = num_samples - (num_b0 + num_shell1 + num_shell2)
+    if random_seed < 500:
+        num_b0 = round(num_samples*len(bvalue_dict["b0"])/bvalues.shape[0])
+        num_shell1 = round(num_samples*len(bvalue_dict["shell1"])/bvalues.shape[0])
+        num_shell2 = round(num_samples*len(bvalue_dict["shell2"])/bvalues.shape[0])
+        num_shell3 = num_samples - (num_b0 + num_shell1 + num_shell2)
 
-    np.random.seed(seed=100)
-    b0 = np.random.choice(bvalue_dict["b0"], num_b0, replace=False)
-    shell1 = np.random.choice(bvalue_dict["shell1"], num_shell1, replace=False)
-    shell2 = np.random.choice(bvalue_dict["shell2"], num_shell2, replace=False)
-    shell3 = np.random.choice(bvalue_dict["shell3"], num_shell3, replace=False)
-    
-    subsampling = np.concatenate((b0,shell1,shell2,shell3),
-                                 axis=0)
+        np.random.seed(seed=random_seed)
+        b0 = np.random.choice(bvalue_dict["b0"], num_b0, replace=False)
+        shell1 = np.random.choice(bvalue_dict["shell1"], num_shell1, replace=False)
+        shell2 = np.random.choice(bvalue_dict["shell2"], num_shell2, replace=False)
+        shell3 = np.random.choice(bvalue_dict["shell3"], num_shell3, replace=False)
+        
+        subsampling = np.concatenate((b0,shell1,shell2,shell3),
+                                     axis=0)
 
+    else:
+        num_b0 = round(1.5*num_samples*len(bvalue_dict["b0"])/bvalues.shape[0])
+        num_shell1 = round(1.5*num_samples*len(bvalue_dict["shell1"])/bvalues.shape[0])
+        num_shell2 = num_samples - (num_b0 + num_shell1)
+
+        np.random.seed(seed=random_seed)
+        b0 = np.random.choice(bvalue_dict["b0"], num_b0, replace=False)
+        shell1 = np.random.choice(bvalue_dict["shell1"], num_shell1, replace=False)
+        shell2 = np.random.choice(bvalue_dict["shell2"], num_shell2, replace=False)
+        
+        subsampling = np.concatenate((b0,shell1,shell2),
+                                     axis=0)
 
     if shuffle is True:
         np.random.shuffle(subsampling)
@@ -123,3 +135,13 @@ def gensamples(num_samples, patient_number="N011618",
         plt.show()
 
     return subsampling
+
+def main():
+    n_directions = 24
+    samples = gensamples(n_directions)
+
+    print(samples + 1)
+
+if __name__ == "__main__":
+    main()
+    

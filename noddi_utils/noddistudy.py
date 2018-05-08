@@ -41,9 +41,42 @@ class NoddiData(object):
             for patient_number_list in self.patient_database.keys():
                 print("\t%s" % patient_number_list)
             sys.exit()
-                
-        self.patient_info = self.patient_database[patient_number]
 
+        if patient_number is "test":
+            self.list_test_data = []
+            for patient_number_list in self.patient_database.keys():
+                data_type = self.patient_database[patient_number_list]["data_type"]
+                if data_type == "test":
+                    self.list_test_data.append(patient_number_list)
+        else:        
+            self.patient_info = self.patient_database[patient_number]
+        
+    def get_test(self):
+        """
+        Returns the test data
+    
+        Returns
+        -------
+        data_type: dict of arrays
+            The test data in a dictionary for each patient for all
+            metrics and full data
+        """
+
+        data_test_dict = {}
+        for patient_number in self.list_test_data:
+            self.patient_info = self.patient_database[patient_number]
+            data_patient = {}
+            data_patient["odi"] = self._return_data("odi",False)
+            data_patient["fiso"] = self._return_data("fiso",False)
+            data_patient["ficvf"] = self._return_data("ficvf",False)
+            data_patient["gfa"] = matutils.MatReader(self.patient_info["gfa"],
+                                                     keyName="GFA")
+            data_patient["full"] = self._return_data("full",False)
+            data_test_dict[patient_number] = data_patient
+
+        return data_test_dict
+
+        
     def get_type(self):
         """
         Returns the type of data (training versus testing)
@@ -223,6 +256,14 @@ class NoddiData(object):
 
         else:
             img_np = img.get_data()
+
+            mask_condition = (self.patient_info["mask"] is not None and
+                              (data_type == "odi" or data_type == "fiso" or
+                               data_type == "ficvf" or data_type == "gfa"))
+            if mask_condition:
+                mask = nib.load(self.patient_info["mask"])
+                img_np *= mask.get_data()
+            
             return img_np
 
         
@@ -232,19 +273,11 @@ def main():
     import noddistudy
     from utils import display
     
-    noddi_data = noddistudy.NoddiData("P100716")
+    noddi_data = noddistudy.NoddiData("test")
+    test_data = noddi_data.get_test()
+    print(test_data.keys())
+    print(test_data["N011118A"].keys())
 
-    data = noddi_data.get_adc()
-    print(np.max(data[:,:,13]))
-
-    data[data > 5e-8] = 5e-8
-    
-    plt.figure()
-    display.Render(data)
-
-    plt.figure()
-    plt.imshow(abs(data[:,:,-1-3]))
-    plt.show()
 
 if __name__ == "__main__":
     main()
