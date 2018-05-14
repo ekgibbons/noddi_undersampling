@@ -28,7 +28,6 @@ for patient_number in patients:
     fm_scores[patient_number] = {}
     for n_directions in directions:
         fm = eng.predict_fm_score(patient_number, n_directions, nargout=3)
-        print(fm)
         fm_scores[patient_number][n_directions] = fm
 
 rcParams['font.sans-serif'] = ['Verdana']

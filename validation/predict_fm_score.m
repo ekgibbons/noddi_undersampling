@@ -16,25 +16,17 @@ function [UEtp2Prediction, PredictFromOriginal, UEtp2Actual] = ...
 
 original_path = pwd;
 
-% $$$ addpath /v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/ ...
-% $$$     Stroke_DSI_Processing/Scripts/Processing_for_Eric
-% $$$ addpath /v/raid1b/gadluru/softs/freesurfer/matlab
-% $$$ fontsize = 18;                          
-
 prefixOptions = {'P041714','P081114','P010715','P061114','P030315','P032315','P080715',...
                  'P020916','P111816'};
 
 StrokeNumber = find(contains(prefixOptions,patient_number));
 
 prefix = {prefixOptions{StrokeNumber}};
-% prefix = {'N011118A'}; For normals switch manually
 
 %load the undersampled data
 DataPath = '/v/raid1b/egibbons/MRIdata/DTI/noddi/processing';
 FileName = sprintf('%i_directions_2d.h5',n_directions);
 [ImagingParameterMaps] = loadH5Data(prefix{1},DataPath,FileName); 
-
-
 
 %separate the ipsilesional and contralesional CST hemispheres
 ipsi_contra = [1 -1 -1 1 -1 -1 1 -1 -1]; % indicates which side is ipsi
@@ -63,10 +55,6 @@ load UEtp2.mat
 PredictFromOriginal = ODImeanSlope*MeanDifferenceOriginal(9) + ODImeanIntercept;
 UEtp2Actual = UEtp2(StrokeNumber);
 
-%show table
-% $$$ T = table(UEtp2Prediction,PredictFromOriginal,UEtp2Actual);
-% $$$ T.Properties.VariableNames = {'Prediction_Undersampled', ...
-% $$$                     'Prediction_Original','Actual'}
 
 cd(original_path);
 
