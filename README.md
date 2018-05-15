@@ -36,10 +36,10 @@ To use the virtual environment, just run
 source activate [your_env_name]
 ```
 
-You will need to add my `python_utils` library to the `PYTHON_PATH`.  This will be most easily done by running the python script
+You will need to add my `python_utils` library to the `PYTHON_PATH` by
 
 ```
-python path_setup.py
+source path_setup.sh
 ```
 
 ## Generating the figures for the paper
@@ -51,5 +51,5 @@ cd validation
 python [whatever_figure_you_want]_fig.py
 ```
 
-This should spit out the figure window pane through x11 and also save it in the `results` folder (relative to the base).
+This should spit out the figure window pane through x11 and also save it in the `results` folder (relative to the base).  You will need to make the `results` folder first, however.  
 
