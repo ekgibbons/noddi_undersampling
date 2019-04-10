@@ -91,7 +91,7 @@ for model_type in models:
             else:
                 path_figure = "%s/GFA.mat" % (path_to_figs)
                 
-                img_np = matutils.MatReader(path_figure,
+                img_np = matutils.matreader(path_figure,
                                             keyName="GFA").transpose(1,0,2)[::-1,::-1,:]
                 
             if ii == 0:

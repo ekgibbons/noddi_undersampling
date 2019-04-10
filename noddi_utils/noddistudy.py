@@ -69,7 +69,7 @@ class NoddiData(object):
             data_patient["odi"] = self._return_data("odi",False)
             data_patient["fiso"] = self._return_data("fiso",False)
             data_patient["ficvf"] = self._return_data("ficvf",False)
-            data_patient["gfa"] = matutils.MatReader(self.patient_info["gfa"],
+            data_patient["gfa"] = matutils.matreader(self.patient_info["gfa"],
                                                      keyName="GFA")
             data_patient["full"] = self._return_data("full",False)
             data_test_dict[patient_number] = data_patient
@@ -198,7 +198,7 @@ class NoddiData(object):
             The 3D gfa map (x, y, z)
         """
 
-        return matutils.MatReader(self.patient_info["gfa"],
+        return matutils.matreader(self.patient_info["gfa"],
                                   keyName="GFA")
 
 
