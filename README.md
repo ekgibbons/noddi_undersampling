@@ -7,29 +7,36 @@ This is the code for generating NODDI maps (ODI, FISO, and FICVF) rapidly and si
 This library will require the following the dependencies:
 
 * python3.5+
-* keras2.1+
-* matlab.engine
-* matplotlib
-* skimage0.13+
-* numpy
-* h5py2.7+
-* scipy0.19+
+* tensorflow1.8+ (`pip install --upgrade tensorflow-gpu`)
+* keras2.1+ (`pip install keras`)
+* webcolors (`pip install webcolors`)
+* ants (see their github for install)
 
-If you don't have this installed, the easiest is through the anaconda virtual environments.
+* matplotlib 
+* scikit-image
+* numpy
+* h5py
+* scipy
+* nibabel
+* matlab.engine
+
+If you don't have these installed, the easiest is through the anaconda virtual environments.
 
 ```
 conda create -n [your_env_name] python=3.6
 ```
 
-This will install the conda environment.  Now you need to install each of the pacakages either through `pip` or `conda install`.
+This will install the conda environment.  Now you need to install each of the pacakages either through `pip` or `conda install`.  You will need CUDA9.0 and CUDNN7.  You can get that through
 
-The exception to this is the `matlab.engine` package, which will be needed separately.  This can be done by (according to this)
+```
+conda install cudnn
+```
+The exception to this is the `matlab.engine` package, which will be needed separately.  This can be done by
 
 ```
 cd "matlabroot\extern\engines\python"
 python setup.py build --build-base="builddir" install --prefix="installdir"
 ```
-
 To use the virtual environment, just run
 
 ```
