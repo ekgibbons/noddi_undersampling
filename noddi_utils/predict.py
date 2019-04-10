@@ -9,12 +9,13 @@ import numpy as np
 sys.path.append("/home/mirl/egibbons/noddi")
 from gfa_2d import simple2d as simple2d_gfa
 from golkov_multi import model1d as model1d_multi
+from model_1d import simple2d as simple1d
 from model_2d import simple2d
 from noddi_2d import simple2d as simple2d_noddi
 from noddi_utils import noddistudy
 from noddi_utils import subsampling
 from utils import display
-from utils import readhd5
+from utils import readhdf5
 
 def model_2d(data,n_directions,random_seed=400,loss_type="l1"):
 
@@ -31,10 +32,10 @@ def model_2d(data,n_directions,random_seed=400,loss_type="l1"):
     
     max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_2d.h5" %
                 n_directions)
-    maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
 
     max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-    max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
     subsampling_pattern = subsampling.gensamples(n_directions,random_seed=random_seed)
     x = data[:,:,:,subsampling_pattern]
@@ -56,15 +57,141 @@ def model_2d(data,n_directions,random_seed=400,loss_type="l1"):
     prediction[:,:,:,3] /= diffusivity_scaling
         
     return prediction
+
+def model_raw(data,n_directions,random_seed=400,loss_type="l1"):
+
+    image_size = (128,128,n_directions)
+
+    model = simple2d.res2d(image_size)
+    model.compile(optimizer=Adam(lr=1e-3),
+                  loss="mean_absolute_error",
+                  metrics=["accuracy"])
+    model.load_weights("/v/raid1b/egibbons/models/noddi-%i_raw.h5" %
+                       (n_directions))
+    print("2D dense model loaded for raw data.  Using %s loss" % loss_type)
+
+    
+    max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_raw.h5" %
+                n_directions)
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
+
+    max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_raw.h5"
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
+
+    subsampling_pattern = subsampling.gensamples(n_directions,random_seed=random_seed)
+    x = data[:,:,:,subsampling_pattern]
+    x = x.transpose(2,0,1,3)
+
+    x /= maxs.squeeze()[None,None,None,:]
+    
+    print("Predicting 2D...")
+    start = time.time()
+    prediction = model.predict(x, batch_size=10).transpose(1,2,0,3)
+    print("Predictions completed...took: %f" % (time.time() - start))
+
+    ### DISPLAY ###
+
+    diffusivity_scaling = 1
+    for ii in range(4):
+        prediction[:,:,:,ii] *= max_y[ii]
+
+    prediction[:,:,:,3] /= diffusivity_scaling
         
+    return prediction
+
+def model_raw_new(data,n_directions,random_seed=400,loss_type="l1"):
+
+    image_size = (128,128,n_directions)
+
+    model = simple2d.res2dnew(image_size)
+    model.compile(optimizer=Adam(lr=1e-3),
+                  loss="mean_absolute_error",
+                  metrics=["accuracy"])
+    model.load_weights("/v/raid1b/egibbons/models/noddi-%i_new_raw.h5" %
+                       (n_directions))
+    print("2D dense model loaded for raw data.  Using %s loss" % loss_type)
+
+    
+    max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_raw.h5" %
+                n_directions)
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
+
+    max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_raw.h5"
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
+
+    subsampling_pattern = subsampling.gensamples(n_directions,random_seed=random_seed)
+    x = data[:,:,:,subsampling_pattern]
+    x = x.transpose(2,0,1,3).astype(float)
+
+    x /= maxs.squeeze()[None,None,None,:].astype(float)
+    
+    print("Predicting 2D...")
+    start = time.time()
+    prediction = model.predict(x, batch_size=10).transpose(1,2,0,3)
+    print("Predictions completed...took: %f" % (time.time() - start))
+
+    ### DISPLAY ###
+
+    diffusivity_scaling = 1
+    for ii in range(4):
+        prediction[:,:,:,ii] *= max_y[ii]
+
+    prediction[:,:,:,3] /= diffusivity_scaling
+        
+    return prediction
+
+
+
+def model_1d(data,n_directions,random_seed=400,loss_type="l1"):
+
+    image_size = (128,128,n_directions)
+
+    model = simple1d.res2d(image_size)
+    model.compile(optimizer=Adam(lr=1e-3),
+                  loss="mean_absolute_error",
+                  metrics=["accuracy"])
+    model.load_weights("/v/raid1b/egibbons/models/noddi-%i_1d_res_%s.h5" %
+                       (n_directions, loss_type))
+    print("2D dense model loaded.  Using %s loss" % loss_type)
+
+    
+    max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_2d.h5" %
+                n_directions)
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
+
+    max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
+
+    subsampling_pattern = subsampling.gensamples(n_directions,random_seed=random_seed)
+    x = data[:,:,:,subsampling_pattern]
+    x = x.transpose(2,0,1,3)
+
+    x /= maxs.squeeze()[None,None,None,:]
+    
+    print("Predicting 2D...")
+    start = time.time()
+    prediction = model.predict(x, batch_size=10).transpose(1,2,0,3)
+    print("Predictions completed...took: %f" % (time.time() - start))
+
+    ### DISPLAY ###
+
+    diffusivity_scaling = 1
+    for ii in range(4):
+        prediction[:,:,:,ii] *= max_y[ii]
+
+    prediction[:,:,:,3] /= diffusivity_scaling
+        
+    return prediction
+
+
 def golkov_multi(data, n_directions, random_seed=400):
 
     max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_1d.h5" %
                 n_directions)
-    maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
 
     max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_1d.h5"
-    max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
     
     subsampling_pattern = subsampling.gensamples(n_directions, random_seed=random_seed)
 
@@ -116,10 +243,10 @@ def sampling_2d(data,n_directions,random_seed=400,loss_type="l1"):
 
     max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_%i_seed_2d.h5" %
                 (n_directions, random_seed))
-    maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
 
     max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-    max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
     subsampling_pattern = subsampling.gensamples(n_directions,random_seed=random_seed)
     x = data[:,:,:,subsampling_pattern]
@@ -148,10 +275,10 @@ def separate_2d(data,n_directions,random_seed=400,loss_type="l1",scaling=True):
     # load the data
     max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/max_values_%i_directions_2d.h5" %
                 n_directions)
-    maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
+    maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
     
     max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-    max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+    max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
     subsampling_pattern = subsampling.gensamples(n_directions,random_seed=random_seed)
     x = data[:,:,:,subsampling_pattern]

@@ -5,7 +5,7 @@ import sys
 import time
 
 from utils import display
-from utils import readhd5
+from utils import readhdf5
 
 
 sys.path.append("/home/mirl/egibbons/noddi")

@@ -11,7 +11,7 @@ sys.path.append("/home/mirl/egibbons/noddi")
 from noddi_utils import metrics
 from noddi_utils import noddistudy
 from utils import display
-from utils import readhd5
+from utils import readhdf5
 
 test_cases = ["P032315","P080715","P061114",
               "N011118A","N011118B"]
@@ -20,7 +20,7 @@ test_cases = ["P032315","P080715","P061114",
 directions = [128, 64, 32, 24, 16, 8]
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 data = {}
 models = ["2d", "1d"]
@@ -45,7 +45,7 @@ for model_type in models:
             path_data = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/"
                          "processing/%s_%i_directions_%s.h5" %
                          (patient_number, n_directions,model_type))
-            prediction = readhd5.ReadHDF5(path_data,"predictions")
+            prediction = readhdf5.read_hdf5(path_data,"predictions")
             
             data_odi = noddi_data.get_odi()
             data_fiso = noddi_data.get_fiso()

@@ -175,33 +175,51 @@ def main():
 
     
     list_directions = [24]
-    list_seeds = [100, 200, 300, 400, 500, 600]
+    list_seeds = [100, 200, 300, 400, 500, 600, 700]
     colors = ["blue","yellow","green","red","violet","orange"] 
     
     color_red = np.array([[220, 50, 47]])/255
     color_blue = np.array([[38, 139, 210]])/255
     
     for n_directions in list_directions:
-        ii = 0
-        for seed in list_seeds:
+        for ii, seed in enumerate(list_seeds):
             directions_used, directions_total = gensamples(n_directions,random_seed=seed)
             
             fig = plt.figure()
             ax = fig.add_subplot(111,projection="3d")
+
+            marker_size = 200
             
-            ax.scatter(directions_used[:,0],directions_used[:,1],directions_used[:,2],
-                       c=display.get_color(colors[ii]), marker="o")
+            if ii is 6:
+                ax.scatter(directions_total[:,0],directions_total[:,1],directions_total[:,2],
+                           c=np.array([[170, 0, 0]])/255., marker="o", s=marker_size) #display.get_color("red"), marker="o")
+                ax.grid(False)
+                ax.axis("off")
+            else:
+                ax.scatter(directions_used[:,0],directions_used[:,1],directions_used[:,2],
+                           c=np.array([[0, 0, 128]])/255., marker="o", s=marker_size) #display.get_color("blue"), marker="o")
+                ax.grid(False)
+                ax.axis("off")
+
+            ax.w_xaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+            ax.w_yaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+            ax.w_zaxis.set_pane_color((1.0, 1.0, 1.0, 1.0))
+
+            ax.set_yticklabels([])
+            ax.set_xticklabels([])
+            ax.set_zticklabels([])
+
+            ax.set_xlim(-3500, 3500)
+            ax.set_ylim(-3500, 3500)
+            ax.set_zlim(-3500, 3500)
             
-            ax.scatter(directions_total[:,0],directions_total[:,1],directions_total[:,2],
-                       c=display.get_color("grey"), marker="o")
-            
-        
-          
+
             plt.savefig("sampling_%i_directions_seed_%i.pdf"
                         % (n_directions, seed),
                         bbox_inches="tight")
 
-            ii += 1
+            
+
             
     plt.show()
 

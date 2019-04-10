@@ -13,6 +13,7 @@ from keras.layers import AveragePooling2D
 from keras.layers import BatchNormalization
 from keras.layers import Concatenate
 from keras.layers import Conv2D
+from keras.layers import Conv3D
 from keras.layers import Dense
 from keras.layers import GlobalAveragePooling2D
 from keras.layers import GlobalMaxPooling2D
@@ -48,7 +49,135 @@ def res2d(input_size):
     model = Model(inputs=[img_input], outputs=[out])
 
     return model
+
+def res2dnew(input_size):
+
+    img_input = Input(shape=input_size)
     
+    axis_use = 3 if K.image_data_format() == 'channels_last' else 1
+
+    x = Conv2D(128,(1,1),input_shape=input_size,activation="relu",
+               padding="same")(img_input)
+
+    x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x)
+    x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x1)
+
+    x = Add()([x,x1])
+
+    x = Conv2D(128,(1,1),activation="relu",padding="same")(x)
+
+    x2 = Conv2D(128,(3,3),activation="relu",padding="same")(x)
+    x2 = Conv2D(128,(3,3),activation="relu",padding="same")(x2)
+
+    x = Add()([x,x2])
+
+    x = Conv2D(256,(1,1),input_shape=input_size,activation="relu",
+               padding="same")(x)
+
+    x1 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x1 = Conv2D(256,(3,3),activation="relu",padding="same")(x1)
+
+    x = Add()([x,x1])
+
+    x = Conv2D(256,(1,1),activation="relu",padding="same")(x)
+
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x2)
+
+    x = Add()([x,x2])
+
+    out = Conv2D(4,(1,1),activation="linear",padding="same")(x)
+
+    model = Model(inputs=[img_input], outputs=[out])
+
+    return model
+
+def res2dnew2(input_size):
+
+    img_input = Input(shape=input_size)
+    
+    axis_use = 3 if K.image_data_format() == 'channels_last' else 1
+
+    x = Conv2D(128,(1,1),input_shape=input_size,activation="relu",
+               padding="same")(img_input)
+
+    x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x)
+    x1 = Conv2D(128,(3,3),activation="relu",padding="same")(x1)
+
+    x = Add()([x,x1])
+
+    x = Conv2D(128,(1,1),activation="relu",padding="same")(x)
+
+    x2 = Conv2D(128,(3,3),activation="relu",padding="same")(x)
+    x2 = Conv2D(128,(3,3),activation="relu",padding="same")(x2)
+
+    x = Add()([x,x2])
+
+    x = Conv2D(256,(1,1),input_shape=input_size,activation="relu",
+               padding="same")(x)
+
+    x1 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x1 = Conv2D(256,(3,3),activation="relu",padding="same")(x1)
+
+    x = Add()([x,x1])
+
+    x = Conv2D(256,(1,1),activation="relu",padding="same")(x)
+
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x2)
+
+    x = Add()([x,x2])
+
+    x = Conv2D(256,(1,1),input_shape=input_size,activation="relu",
+               padding="same")(x)
+
+    x1 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x1 = Conv2D(256,(3,3),activation="relu",padding="same")(x1)
+
+    x = Add()([x,x1])
+
+    x = Conv2D(256,(1,1),activation="relu",padding="same")(x)
+
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x)
+    x2 = Conv2D(256,(3,3),activation="relu",padding="same")(x2)
+
+    x = Add()([x,x2])
+    
+    out = Conv2D(4,(1,1),activation="linear",padding="same")(x)
+
+    model = Model(inputs=[img_input], outputs=[out])
+
+    return model
+
+
+def res3d(input_size):
+
+    img_input = Input(shape=input_size)
+    
+    axis_use = 4 if K.image_data_format() == 'channels_last' else 1
+
+    x = Conv3D(128,(1,1,1),input_shape=input_size,activation="relu",
+               padding="same")(img_input)
+
+    x1 = Conv3D(128,(3,3,3),activation="relu",padding="same")(x)
+    x1 = Conv3D(128,(3,3,3),activation="relu",padding="same")(x1)
+
+    x = Add()([x,x1])
+
+    x = Conv3D(256,(1,1,1),activation="relu",padding="same")(x)
+
+    x2 = Conv3D(256,(3,3,3),activation="relu",padding="same")(x)
+    x2 = Conv3D(256,(3,3,3),activation="relu",padding="same")(x2)
+
+    x = Add()([x,x2])
+
+    out = Conv3D(4,(1,1,1),activation="linear",padding="same")(x)
+
+    model = Model(inputs=[img_input], outputs=[out])
+
+    return model
+
+
 
 def simple2d(input_size):
 
@@ -73,15 +202,18 @@ def simple2d(input_size):
 
 def main():
 
-    image_size = (128, 128, 64)
-
+    image_size = (128, 128, 24)
     model = res2d(image_size)
-
     model.summary()
+
+    image_size = (128, 128, 24)
+    model = res2dnew(image_size)
+    model.summary()
+
     
-    plot_model(model,
-               to_file="1dnet_im.png",
-               show_shapes=True)
+    # plot_model(model,
+    #            to_file="1dnet_im.png",
+    #            show_shapes=True)
 
 
 if __name__ == "__main__":

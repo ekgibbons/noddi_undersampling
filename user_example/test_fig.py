@@ -16,7 +16,7 @@ from model_2d import simple2d
 from noddi_utils import noddistudy
 from noddi_utils import subsampling
 from recon import imtools
-from utils import readhd5
+from utils import readhdf5
 
 test_cases = ["P032315","P080715","P061114",
               "N011118A","N011118B"]
@@ -36,7 +36,7 @@ data_ficvf = noddi_data.get_ficvf().transpose(1,0,2)[::-1,::-1]
 data_gfa = noddi_data.get_gfa().transpose(1,0,2)[::-1,::-1]
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 ### LOAD MODEL ###
 
@@ -54,10 +54,10 @@ print("2D dense model loaded.  Using %s loss" % loss_type)
 max_path = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/"
             "max_values_%i_directions_2d.h5" %
             n_directions)
-maxs = readhd5.ReadHDF5(max_path,"max_values")[None,None,None,:]
+maxs = readhdf5.read_hdf5(max_path,"max_values")[None,None,None,:]
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 subsampling_pattern = subsampling.gensamples(n_directions)
 x = data_full[:,:,:,subsampling_pattern]

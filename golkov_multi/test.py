@@ -12,7 +12,7 @@ import numpy as np
 import tensorflow as tf
 
 from utils import display
-from utils import readhd5
+from utils import readhdf5
 
 
 sys.path.append("/home/mirl/egibbons/noddi")
@@ -25,7 +25,7 @@ from noddi_utils import subsampling
 n_channels = 64
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_1d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 
 patient_number = "P111816"

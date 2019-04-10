@@ -108,6 +108,24 @@ class NoddiData(object):
 
         return self._return_data("full", return_nifti)
 
+    def get_raw(self,return_nifti=False):
+        """
+        Returns the raw (all directions) image pixel values
+
+        Arguments
+        ---------
+        return_nifti: bool
+            Whether or not you want the nibabel object or numpy
+            array on return
+        
+        Returns
+        -------
+        data:  array_like
+            The full 4D dataset (x, y, d, z)
+        """
+
+        return self._return_data("raw", return_nifti)
+ 
     def get_odi(self,return_nifti=False):
         """
         Returns the ODI map pixel values

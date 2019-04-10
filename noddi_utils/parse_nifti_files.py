@@ -8,6 +8,8 @@ def pnumber(filename):
     
 path_full = ("/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/"
              "Stroke_DSI_Processing/Data/DeEddyed_volumes")
+path_raw = ("/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/"
+            "Stroke_DSI_Processing/Data/Original_DSI_Data")
 path_noddi = ("/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/"
               "Stroke_DSI_Processing/Data/Models/NODDIMaps")
 path_gfa = ("/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/" 
@@ -20,6 +22,7 @@ path_mask = ("/v/raid1b/khodgson/MRIdata/DTI/CNC_Imris/Stroke_patients/"
              "Stroke_DSI_Processing/Data/Models/Masks")
 
 filenames_full = glob.glob("%s/*.nii.gz" % path_full)
+filenames_raw = glob.glob("%s/*.nii.gz" % path_raw)
 filenames_noddi = glob.glob("%s/*.nii" % path_noddi)
 filenames_gfa = glob.glob("%s/*.mat" % path_gfa)
 filenames_dti = glob.glob("%s/*.nii.gz" % path_dti)
@@ -75,6 +78,11 @@ for filename in filenames_full:
     except:
         patient_dict["mask"] = None
     
+    try:
+        patient_dict["raw"] = [raw_file for raw_file in filenames_raw if patient_number in raw_file][0]
+    except:
+        print("missing raw for: %s" % patient_number)
+        patient_dict["raw"] = None
 
     
     # dti_maps = [dti_file for dti_file in filenames_dti if patient_number in dti_file]

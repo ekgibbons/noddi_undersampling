@@ -16,7 +16,7 @@ from noddi_utils import noddistudy
 from noddi_utils import predict
 from noddi_utils import subsampling
 from recon import imtools
-from utils import readhd5
+from utils import readhdf5
 from utils import display
 
 
@@ -29,7 +29,7 @@ patient_number = test_cases[3]
 noddi_data = noddistudy.NoddiData(patient_number)
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 data_full = noddi_data.get_full()
 data_odi = noddi_data.get_odi()
@@ -67,6 +67,7 @@ for ii in range(4):
                                    reference[:,:,slice_use,ii]))
 
 directions = [128, 64, 32, 24, 16, 8]
+directions = [128, 64, 24, 8]
 
 jj = 0
 for n_directions in directions:

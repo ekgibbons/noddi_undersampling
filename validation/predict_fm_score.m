@@ -1,5 +1,5 @@
 function [UEtp2Prediction, PredictFromOriginal, UEtp2Actual] = ...
-        predict_fm_score(patient_number, n_directions)
+        predict_fm_score(patient_number, model_type, n_directions)
 % Check whether the asymmetries in the Posterior Limb of the
 % Internal Capsule (PLIC) still predict outcomes based on a baseline scan. 
 % Using the linear regression equation from prior work, we input the
@@ -25,7 +25,7 @@ prefix = {prefixOptions{StrokeNumber}};
 
 %load the undersampled data
 DataPath = '/v/raid1b/egibbons/MRIdata/DTI/noddi/processing';
-FileName = sprintf('%i_directions_2d.h5',n_directions);
+FileName = sprintf('%i_directions_%s.h5',n_directions,model_type);
 [ImagingParameterMaps] = loadH5Data(prefix{1},DataPath,FileName); 
 
 %separate the ipsilesional and contralesional CST hemispheres
@@ -33,15 +33,17 @@ ipsi_contra = [1 -1 -1 1 -1 -1 1 -1 -1]; % indicates which side is ipsi
 [IpsiCSTcoord, ContraCSTcoord] = SeparateIpsiContraCST(prefix,ipsi_contra(StrokeNumber));
 
 %Load the Original Data
-[MeanDifferenceUndersampled] = MeanDifferenceCST(IpsiCSTcoord, ContraCSTcoord,...
-    ImagingParameterMaps);
+[MeanDifferenceUndersampled] = MeanDifferenceCST(IpsiCSTcoord,...
+                                                 ContraCSTcoord,...
+                                                 ImagingParameterMaps);
 ODI = load_nifti(sprintf('NODDIMaps/%s_hydi_odi.nii',prefix{1}));
 RDI = load_nifti(sprintf('NODDIMaps/%s_hydi_ficvf.nii',prefix{1}));
 CSF = load_nifti(sprintf('NODDIMaps/%s_hydi_fiso.nii',prefix{1}));
 load(sprintf('GFAMaps/GFA_eddy_rot_bvecs/%s_GFA.mat',prefix{1}));
-OriginalMaps = {ODI.vol,RDI.vol, CSF.vol,GFA};
-[MeanDifferenceOriginal] = MeanDifferenceCST(IpsiCSTcoord, ContraCSTcoord,...
-    OriginalMaps);
+OriginalMaps = {ODI.vol, RDI.vol, CSF.vol,GFA};
+[MeanDifferenceOriginal] = MeanDifferenceCST(IpsiCSTcoord,...
+                                             ContraCSTcoord,...
+                                             OriginalMaps);
 
 %linear regression model parameters
 ODImeanSlope = 423.18;

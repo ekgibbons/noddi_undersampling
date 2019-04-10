@@ -16,7 +16,7 @@ import tensorflow as tf
 
 import model1d
 from utils import display
-from utils import readhd5
+from utils import readhdf5
 
 def train(n_directions):
     print("running network with %i directions" % n_directions)
@@ -44,11 +44,11 @@ def train(n_directions):
     y_gfa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_gfa_1d.h5"
 
     print("Loading data...")
-    x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_directions)
-    y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
-    y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
-    y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
-    y_gfa = readhd5.ReadHDF5(y_gfa_path,"y_gfa")
+    x = readhdf5.read_hdf5(x_path,"x_%i_directions" % n_directions)
+    y_odi = readhdf5.read_hdf5(y_odi_path,"y_odi")
+    y_fiso = readhdf5.read_hdf5(y_fiso_path,"y_fiso")
+    y_ficvf = readhdf5.read_hdf5(y_ficvf_path,"y_ficvf")
+    y_gfa = readhdf5.read_hdf5(y_gfa_path,"y_gfa")
     print("Data is loaded...")
     
     n_samples, _ = x.shape

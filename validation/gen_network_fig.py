@@ -3,7 +3,7 @@ import time
 from matplotlib import pyplot as plt
 import numpy as np
 
-from utils import readhd5
+from utils import readhdf5
 
 n_directions = 32
 
@@ -17,12 +17,12 @@ y_gfa_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/y_gfa_2d.h5"
 print("Loading data...")
 
 start = time.time()
-y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
-y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
-y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
-y_gfa = readhd5.ReadHDF5(y_gfa_path,"y_gfa")
+y_odi = readhdf5.read_hdf5(y_odi_path,"y_odi")
+y_fiso = readhdf5.read_hdf5(y_fiso_path,"y_fiso")
+y_ficvf = readhdf5.read_hdf5(y_ficvf_path,"y_ficvf")
+y_gfa = readhdf5.read_hdf5(y_gfa_path,"y_gfa")
 
-x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_directions).transpose(0,2,1,3)[:,::-1,::-1,:]
+x = readhdf5.read_hdf5(x_path,"x_%i_directions" % n_directions).transpose(0,2,1,3)[:,::-1,::-1,:]
 y = np.concatenate((y_odi, y_fiso, y_ficvf, y_gfa),
                    axis=3).transpose(0,2,1,3)[:,::-1,::-1,:]
 

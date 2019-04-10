@@ -12,7 +12,7 @@ from noddi_utils import metrics
 from noddi_utils import noddistudy
 from recon import imtools
 from utils import display
-from utils import readhd5
+from utils import readhdf5
 
 def orient(data, index):
 
@@ -33,7 +33,7 @@ test_cases = ["P061114","P032315","P080715"]
 slice_number = [26, 23, 22]
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 data = {}
 data_types = ["odi", "fiso", "ficvf", "gfa"]
@@ -56,7 +56,7 @@ for ii, patient_number in enumerate(test_cases):
     path_data = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/"
                  "processing/%s_24_directions_2d.h5" %
                  (patient_number))
-    prediction = readhd5.ReadHDF5(path_data,"predictions")
+    prediction = readhdf5.read_hdf5(path_data,"predictions")
     
     data_odi = noddi_data.get_odi()
     data_fiso = noddi_data.get_fiso()

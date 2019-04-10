@@ -8,7 +8,7 @@ sys.path.append("/home/mirl/egibbons/noddi")
 from noddi_utils import noddistudy
 from recon import imtools
 from utils import matutils
-from utils import readhd5
+from utils import readhdf5
 
 patient_number = "P080715"
 
@@ -17,7 +17,7 @@ slice_use = 20
 directions = [128, 64, 32, 24, 16, 8]
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 data = {}
 models = ["2d", "separate_no_scale_2d"]
@@ -39,37 +39,41 @@ for model_type in models:
 
     ii = 0
     for n_directions in directions:
-        path_data = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/"
-                     "processing/%s_%i_directions_%s.h5" %
-                     (patient_number, n_directions, model_type))
+#        if any(n_directions in sub_directions for sub_directions in [24, 8]):
         
-        data = readhd5.ReadHDF5(path_data, "predictions")[:,:,slice_use,3].transpose(1,0)[::-1,::-1]
-
-        data = np.roll(data,roll_factor,axis=0)
-        data = imtools.Crop(data,crop_factor,crop_factor)
-        data /= 0.5
+        if n_directions in [24, 8]:
         
-        data_gfa[data_gfa>max_y[3]] = max_y[3]
+            path_data = ("/v/raid1b/egibbons/MRIdata/DTI/noddi/"
+                         "processing/%s_%i_directions_%s.h5" %
+                         (patient_number, n_directions, model_type))
+            
+            data = readhdf5.read_hdf5(path_data, "predictions")[:,:,slice_use,3].transpose(1,0)[::-1,::-1]
+            
+            data = np.roll(data,roll_factor,axis=0)
+            data = imtools.Crop(data,crop_factor,crop_factor)
+            data /= 0.5
+            
+            data_gfa[data_gfa>max_y[3]] = max_y[3]
+            
+            difference_image = 3*abs(data_gfa - data)
+            
+            print("model: %s, directions: %i" % (model_type, n_directions))
+            
+            if ii is 0:
+                top_montage = data
+                bottom_montage = difference_image
+            else:
+                top_montage = np.vstack((top_montage, data))
+                bottom_montage = np.vstack((bottom_montage, difference_image))
+                
+            ii += 1
 
-        difference_image = 3*abs(data_gfa - data)
-
-        print("model: %s, directions: %i" % (model_type, n_directions))
-        
-        if ii is 0:
-            top_montage = data
-            bottom_montage = difference_image
-        else:
-            top_montage = np.hstack((top_montage, data))
-            bottom_montage = np.hstack((bottom_montage, difference_image))
-
-        ii += 1
-
-    montage_model = np.vstack((top_montage, bottom_montage))
+    montage_model = np.hstack((top_montage, bottom_montage))
 
     if jj is 0:
         montage_final = montage_model
     else:
-        montage_final = np.vstack((montage_final, montage_model))
+        montage_final = np.hstack((montage_final, montage_model))
 
     jj += 1
 

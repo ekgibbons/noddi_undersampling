@@ -3,7 +3,7 @@ import sys
 import time 
 
 loss_type = "l1"
-os.environ["CUDA_VISIBLE_DEVICES"]="1"
+# os.environ["CUDA_VISIBLE_DEVICES"]="0"
 
 import numpy as np
 from matplotlib import pyplot as plt
@@ -26,7 +26,7 @@ import models2d
 from noddi_utils import network_utils
 import simple2d
 import unet2d
-from utils import readhd5
+from utils import readhdf5
 from utils import display
 
 def augmentation(x, y):
@@ -92,17 +92,17 @@ def train(n_directions):
     print("Loading data...")
 
     start = time.time()
-    y_odi = readhd5.ReadHDF5(y_odi_path,"y_odi")
-    y_fiso = readhd5.ReadHDF5(y_fiso_path,"y_fiso")
-    y_ficvf = readhd5.ReadHDF5(y_ficvf_path,"y_ficvf")
-    y_gfa = readhd5.ReadHDF5(y_gfa_path,"y_gfa")
+    y_odi = readhdf5.read_hdf5(y_odi_path,"y_odi")
+    y_fiso = readhdf5.read_hdf5(y_fiso_path,"y_fiso")
+    y_ficvf = readhdf5.read_hdf5(y_ficvf_path,"y_ficvf")
+    y_gfa = readhdf5.read_hdf5(y_gfa_path,"y_gfa")
 
     diffusivity_scaling = 1
     y = np.concatenate((y_odi, y_fiso, y_ficvf,
                         diffusivity_scaling*y_gfa),
                        axis=3)
     
-    x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_directions)
+    x = readhdf5.read_hdf5(x_path,"x_%i_directions" % n_directions)
     
     print("Data is loaded...took: %f seconds" % (time.time() - start))
 
@@ -141,7 +141,7 @@ def train(n_directions):
               y=y,
               batch_size=batch_size_multi_gpu,
               epochs=n_epochs,
-              verbose=1,
+              verbose=2,
               callbacks=[checkpointer, lrate, stopping],
               validation_split=0.2,
               shuffle=True,

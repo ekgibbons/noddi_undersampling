@@ -15,7 +15,7 @@ from noddi_utils import noddistudy
 from noddi_utils import predict
 from noddi_utils import subsampling
 from recon import imtools
-from utils import readhd5
+from utils import readhdf5
 from utils import display
 
 test_cases = ["P032315","P080715","P061114",
@@ -31,23 +31,30 @@ for patient_number in test_cases:
         noddi_data = noddistudy.NoddiData(patient_number)
         
         max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-        max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+        max_y = readhdf5.read_hdf5(max_y_path,"max_y")
         
         data_full = noddi_data.get_full()
         
-        # prediction_2d = predict.model_2d(data_full, n_directions, random_seed=400)
+        prediction_2d = predict.model_2d(data_full, n_directions, random_seed=400)
 
-        # hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/processing/%s_%i_directions_2d.h5" %
-        #                (patient_number, n_directions),"w")
-        # hf.create_dataset("predictions", data=prediction_2d)
-        # hf.close
+        hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/processing/%s_%i_directions_2d.h5" %
+                       (patient_number, n_directions),"w")
+        hf.create_dataset("predictions", data=prediction_2d)
+        hf.close
 
-        # prediction_1d = predict.golkov_multi(data_full, n_directions, random_seed=400)
+        prediction_1d_res = predict.model_1d(data_full, n_directions, random_seed=400)
+
+        hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/processing/%s_%i_directions_1d_res.h5" %
+                       (patient_number, n_directions),"w")
+        hf.create_dataset("predictions", data=prediction_1d_res)
+        hf.close
         
-        # hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/processing/%s_%i_directions_1d.h5" %
-        #                (patient_number, n_directions),"w")
-        # hf.create_dataset("predictions", data=prediction_1d)
-        # hf.close
+        prediction_1d = predict.golkov_multi(data_full, n_directions, random_seed=400)
+        
+        hf = h5py.File("/v/raid1b/egibbons/MRIdata/DTI/noddi/processing/%s_%i_directions_1d.h5" %
+                       (patient_number, n_directions),"w")
+        hf.create_dataset("predictions", data=prediction_1d)
+        hf.close
 
         prediction_separate_2d = predict.separate_2d(data_full, n_directions, random_seed=400)
 
@@ -73,7 +80,7 @@ for patient_number in test_cases:
     #     noddi_data = noddistudy.NoddiData(patient_number)
         
     #     max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-    #     max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+    #     max_y = readhdf5.read_hdf5(max_y_path,"max_y")
         
     #     data_full = noddi_data.get_full()
         

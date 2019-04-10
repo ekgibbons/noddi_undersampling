@@ -20,7 +20,7 @@ sys.path.append("/home/mirl/egibbons/noddi")
 
 from noddi_utils import network_utils
 import simple2d
-from utils import readhd5
+from utils import readhdf5
 from utils import display
 
 def train(n_directions):
@@ -57,11 +57,11 @@ def train(n_directions):
     print("Loading data...")
 
     start = time.time()
-    y_gfa = readhd5.ReadHDF5(y_gfa_path,"y_gfa")
+    y_gfa = readhdf5.read_hdf5(y_gfa_path,"y_gfa")
 
     y = y_gfa
     
-    x = readhd5.ReadHDF5(x_path,"x_%i_directions" % n_directions)
+    x = readhdf5.read_hdf5(x_path,"x_%i_directions" % n_directions)
     
     print("Data is loaded...took: %f seconds" % (time.time() - start))
 

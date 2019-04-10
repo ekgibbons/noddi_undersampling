@@ -19,10 +19,7 @@ from noddi_utils import subsampling
 from recon import imtools
 from utils import display
 from utils import matutils
-from utils import readhd5
-
-
-
+from utils import readhdf5
 
 ### LOAD DATA ###
 patient_number = "P032315"
@@ -36,7 +33,7 @@ data_types = ["odi", "fiso", "ficvf", "gfa"]
 
 
 max_y_path = "/v/raid1b/egibbons/MRIdata/DTI/noddi/max_y_2d.h5"
-max_y = readhd5.ReadHDF5(max_y_path,"max_y")
+max_y = readhdf5.read_hdf5(max_y_path,"max_y")
 
 data_full = noddi_data.get_full()
 data_odi = noddi_data.get_odi()
@@ -132,11 +129,47 @@ for model_type in models:
 
     montage_final = np.hstack((montage_final,montage_2))
 
-    
+    if model_type == "2d":
+        im_2d_1 = prediction[30:70,30:70,slice_use,0]
+        im_2d_2 = prediction[40:80,45:85,slice_use,3]
+    elif model_type == "1d":
+        im_1d_1 = prediction[30:70,30:70,slice_use,0]
+        im_1d_2 = prediction[40:80,45:85,slice_use,3]
+    else:
+        im_na_1 = prediction[30:70,30:70,slice_use,0]
+        im_na_2 = prediction[40:80,45:85,slice_use,3]
 
+reference_1 = reference[30:70,30:70,slice_use,0]
+reference_2 = reference[40:80,45:85,slice_use,3]
+        
+montage_zoom_1 = np.hstack((reference_1,im_2d_1,abs(reference_1-im_2d_1),
+                            im_1d_1,abs(reference_1-im_1d_1),
+                            im_na_1,abs(reference_1-im_na_1)))
+montage_zoom_2 = np.hstack((reference_2,im_2d_2,abs(reference_2-im_2d_2),
+                            im_1d_2,abs(reference_2-im_1d_2),
+                            im_na_2,abs(reference_2-im_na_2)))
+montage_zoom = np.vstack((montage_zoom_1,montage_zoom_2))        
+
+
+    
 plt.figure()
 plt.imshow(abs(montage_final),cmap=cmap_use,vmax=vmax_use)
 plt.colorbar()
 plt.axis("off")
 plt.savefig("../results/fig4_directions_fig.pdf", bbox_inches="tight",dpi=600)
+
+plt.figure()
+plt.imshow(abs(montage_zoom),cmap=cmap_use,vmax=vmax_use)
+plt.colorbar()
+plt.axis("off")
+plt.savefig("../results/fig4_zoom_fig.pdf", bbox_inches="tight",dpi=600)
+
+
+    
+
+
+
+
+
+
 plt.show()
